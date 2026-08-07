@@ -1,43 +1,33 @@
-'use client'
-
-import { Header } from '@/components/Common/Header'
-import { Footer } from '@/components/Common/Footer'
-
 export default function SettingsPage() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Settings</h1>
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-800">
-            <h2 className="text-xl font-semibold mb-4">Theme</h2>
-            <label className="flex items-center gap-3">
-              <input type="checkbox" className="w-4 h-4" />
-              <span>Dark Mode</span>
-            </label>
-          </div>
+    <div style={{ padding: '40px', maxWidth: '1000px', margin: '0 auto' }}>
+      <h1 style={{ fontSize: '32px', marginBottom: '20px' }}>Settings</h1>
 
-          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-800">
-            <h2 className="text-xl font-semibold mb-4">Data</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">All your data is stored locally in your browser. No data is sent to any server.</p>
-            <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-              🗑️ Clear All Data
-            </button>
-          </div>
+      <div style={{ backgroundColor: 'white', padding: '24px', marginBottom: '20px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+        <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>Theme</h2>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+          <input type="checkbox" />
+          <span>Dark Mode</span>
+        </label>
+      </div>
 
-          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-800">
-            <h2 className="text-xl font-semibold mb-2">About</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">AI Product Copilot v1.1</p>
-            <p className="text-xs text-gray-500 mt-2">
-              <a href="https://github.com/shiv12-art/ai-product-copilot" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600">
-                GitHub Repository
-              </a>
-            </p>
-          </div>
-        </div>
-      </main>
-      <Footer />
+      <div style={{ backgroundColor: 'white', padding: '24px', marginBottom: '20px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+        <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>Data</h2>
+        <p style={{ fontSize: '14px', color: '#666', marginBottom: '12px' }}>All your data is stored locally in your browser.</p>
+        <button style={{ padding: '8px 16px', backgroundColor: '#dc2626', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
+          🗑️ Clear All Data
+        </button>
+      </div>
+
+      <div style={{ backgroundColor: 'white', padding: '24px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+        <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>About</h2>
+        <p style={{ fontSize: '14px', color: '#666' }}>AI Product Copilot v1.1</p>
+        <p style={{ fontSize: '12px', color: '#999', marginTop: '8px' }}>
+          <a href="https://github.com/shiv12-art/ai-product-copilot" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none' }}>
+            GitHub Repository
+          </a>
+        </p>
+      </div>
     </div>
   )
 }

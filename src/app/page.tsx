@@ -1,105 +1,57 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { Header } from '@/components/Common/Header'
-import { Footer } from '@/components/Common/Footer'
-import { InputForm } from '@/components/Input/InputForm'
-
 export default function Home() {
-  const router = useRouter()
-
   return (
-    <div className="flex-1 flex flex-col">
-      <Header />
+    <div style={{ padding: '40px', textAlign: 'center' }}>
+      <h1 style={{ fontSize: '48px', marginBottom: '20px' }}>🚀 AI Product Copilot</h1>
+      <p style={{ fontSize: '18px', marginBottom: '10px' }}>Generate professional product artifacts in seconds</p>
+      <p style={{ fontSize: '14px', color: '#666' }}>No sign-ups. No APIs. Works in your browser.</p>
 
-      <main className="flex-1 flex items-center justify-center px-4 py-20">
-        <div className="w-full max-w-2xl">
-          {/* Hero Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              AI Product Copilot
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
-              Transform your product idea into a complete development plan in minutes
-            </p>
-            <p className="text-gray-500 dark:text-gray-500 text-sm">
-              No sign-ups. No APIs. Works entirely in your browser.
-            </p>
+      <div style={{ marginTop: '40px', maxWidth: '600px', margin: '40px auto' }}>
+        <form style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px' }}>Your Product Idea</label>
+            <textarea
+              placeholder="Describe your product..."
+              style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ccc', minHeight: '120px' }}
+            />
           </div>
 
-          {/* Input Form */}
-          <InputForm />
-
-          {/* Features Overview */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
-              <div className="text-2xl mb-2">📋</div>
-              <h3 className="font-semibold mb-2">7 Artifacts</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Canvas, PRD, GTM, Features, Validation, Competitors, Pitch
-              </p>
-            </div>
-            <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
-              <div className="text-2xl mb-2">⚡</div>
-              <h3 className="font-semibold mb-2">Instant</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Generate all artifacts in under 2 seconds
-              </p>
-            </div>
-            <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
-              <div className="text-2xl mb-2">🛟</div>
-              <h3 className="font-semibold mb-2">Professional</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Export as PDF or Markdown for stakeholder reviews
-              </p>
-            </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px' }}>Category</label>
+            <select style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ccc' }}>
+              <option>Select a category...</option>
+              <option>SaaS</option>
+              <option>B2C App</option>
+              <option>Marketplace</option>
+              <option>Hardware</option>
+              <option>Service</option>
+              <option>Community</option>
+              <option>AI Tool</option>
+            </select>
           </div>
 
-          {/* FAQ */}
-          <div className="mt-16 space-y-4">
-            <h2 className="text-2xl font-bold mb-6">Common Questions</h2>
+          <button type="button" style={{ padding: '12px', backgroundColor: '#2563eb', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '16px' }}>
+            ✨ Generate Artifacts
+          </button>
+        </form>
+      </div>
 
-            <details className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 cursor-pointer">
-              <summary className="font-semibold hover:text-blue-600 dark:hover:text-blue-400">
-                How does AI Product Copilot work?
-              </summary>
-              <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                It uses intelligent rule-based generation to analyze your problem statement and create artifacts based on proven product management frameworks. No external APIs or AI services—everything runs in your browser.
-              </p>
-            </details>
-
-            <details className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 cursor-pointer">
-              <summary className="font-semibold hover:text-blue-600 dark:hover:text-blue-400">
-                Can I edit the generated artifacts?
-              </summary>
-              <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                Yes! You can edit any section directly in the app, and your changes are automatically saved. You can also export multiple versions and compare them.
-              </p>
-            </details>
-
-            <details className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 cursor-pointer">
-              <summary className="font-semibold hover:text-blue-600 dark:hover:text-blue-400">
-                Is my data secure?
-              </summary>
-              <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                Completely. All data stays in your browser using localStorage. Nothing is sent to external servers. You can clear your data anytime from settings.
-              </p>
-            </details>
-
-            <details className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 cursor-pointer">
-              <summary className="font-semibold hover:text-blue-600 dark:hover:text-blue-400">
-                How many generations can I store?
-              </summary>
-              <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                You can store up to 10 generations in your browser. Older ones are automatically archived when you exceed the limit.
-              </p>
-            </details>
-          </div>
+      <div style={{ marginTop: '40px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+        <div style={{ padding: '20px', backgroundColor: '#f3f4f6', borderRadius: '8px' }}>
+          <div style={{ fontSize: '24px', marginBottom: '8px' }}>📋</div>
+          <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>7 Artifacts</h3>
+          <p style={{ fontSize: '14px', color: '#666' }}>Canvas, PRD, GTM, Features, Validation, Competitors, Pitch</p>
         </div>
-      </main>
-
-      <Footer />
+        <div style={{ padding: '20px', backgroundColor: '#f3f4f6', borderRadius: '8px' }}>
+          <div style={{ fontSize: '24px', marginBottom: '8px' }}>⚡</div>
+          <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>Instant</h3>
+          <p style={{ fontSize: '14px', color: '#666' }}>Generate all artifacts in under 2 seconds</p>
+        </div>
+        <div style={{ padding: '20px', backgroundColor: '#f3f4f6', borderRadius: '8px' }}>
+          <div style={{ fontSize: '24px', marginBottom: '8px' }}>🛟</div>
+          <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>Professional</h3>
+          <p style={{ fontSize: '14px', color: '#666' }}>Export as PDF or Markdown</p>
+        </div>
+      </div>
     </div>
   )
 }
