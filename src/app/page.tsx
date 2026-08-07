@@ -3,15 +3,26 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-const categoryMap: Record<string, string> = {
-  'SaaS': 'saas',
-  'B2C App': 'b2c_app',
-  'Marketplace': 'marketplace',
-  'Hardware': 'hardware',
-  'Service': 'service',
-  'Community': 'community',
-  'AI Tool': 'ai_tool',
-}
+const categories = [
+  { label: 'SaaS', value: 'saas', emoji: '☁️' },
+  { label: 'Mobile App', value: 'mobile_app', emoji: '📱' },
+  { label: 'Web App', value: 'web_app', emoji: '🌐' },
+  { label: 'Marketplace', value: 'marketplace', emoji: '🛒' },
+  { label: 'B2C App', value: 'b2c_app', emoji: '👥' },
+  { label: 'Hardware', value: 'hardware', emoji: '⚙️' },
+  { label: 'AI Tool', value: 'ai_tool', emoji: '🤖' },
+  { label: 'Fintech', value: 'fintech', emoji: '💰' },
+  { label: 'Healthcare', value: 'healthcare', emoji: '🏥' },
+  { label: 'EdTech', value: 'edtech', emoji: '📚' },
+  { label: 'Gaming', value: 'gaming', emoji: '🎮' },
+  { label: 'Social Network', value: 'social', emoji: '💬' },
+  { label: 'Service', value: 'service', emoji: '🔧' },
+  { label: 'Community', value: 'community', emoji: '🤝' },
+]
+
+const categoryMap: Record<string, string> = Object.fromEntries(
+  categories.map(c => [c.label, c.value])
+)
 
 export default function Home() {
   const router = useRouter()
@@ -63,75 +74,171 @@ export default function Home() {
   }
 
   return (
-    <div style={{ padding: '40px', textAlign: 'center' }}>
-      <h1 style={{ fontSize: '48px', marginBottom: '20px' }}>🚀 AI Product Copilot</h1>
-      <p style={{ fontSize: '18px', marginBottom: '10px' }}>Generate professional product artifacts in seconds</p>
-      <p style={{ fontSize: '14px', color: '#666' }}>No sign-ups. No APIs. Works in your browser.</p>
-
-      <div style={{ marginTop: '40px', maxWidth: '600px', margin: '40px auto' }}>
-        <form onSubmit={handleGenerate} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div>
-            <label style={{ display: 'block', marginBottom: '8px' }}>Your Product Idea</label>
-            <textarea
-              value={problemStatement}
-              onChange={(e) => setProblemStatement(e.target.value)}
-              placeholder="Describe your product..."
-              style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ccc', minHeight: '120px', fontFamily: 'inherit' }}
-            />
-          </div>
-
-          <div>
-            <label style={{ display: 'block', marginBottom: '8px' }}>Category</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ccc', fontFamily: 'inherit' }}
-            >
-              <option value="">Select a category...</option>
-              <option>SaaS</option>
-              <option>B2C App</option>
-              <option>Marketplace</option>
-              <option>Hardware</option>
-              <option>Service</option>
-              <option>Community</option>
-              <option>AI Tool</option>
-            </select>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              padding: '12px',
-              backgroundColor: loading ? '#9ca3af' : '#2563eb',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              fontSize: '16px',
-              fontWeight: 'bold',
-            }}
-          >
-            {loading ? '⏳ Generating...' : '✨ Generate Artifacts'}
-          </button>
-        </form>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)' }}>
+      {/* Header */}
+      <div style={{ padding: '20px 40px', borderBottom: '1px solid rgba(0,0,0,0.05)', backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)' }}>
+        <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#1e293b' }}>🚀 AI Product Copilot</h1>
       </div>
 
-      <div style={{ marginTop: '40px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
-        <div style={{ padding: '20px', backgroundColor: '#f3f4f6', borderRadius: '8px' }}>
-          <div style={{ fontSize: '24px', marginBottom: '8px' }}>📋</div>
-          <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>7 Artifacts</h3>
-          <p style={{ fontSize: '14px', color: '#666' }}>Canvas, PRD, GTM, Features, Validation, Competitors, Pitch</p>
+      {/* Main Content */}
+      <div style={{ padding: '60px 40px', maxWidth: '900px', margin: '0 auto' }}>
+        {/* Hero Section */}
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h2 style={{ fontSize: '42px', fontWeight: '700', color: '#0f172a', marginBottom: '16px', lineHeight: '1.2' }}>
+            Transform Your Product Idea Into Reality
+          </h2>
+          <p style={{ fontSize: '18px', color: '#475569', marginBottom: '8px', lineHeight: '1.6' }}>
+            Generate comprehensive product artifacts in seconds. No sign-ups, no APIs, completely offline.
+          </p>
+          <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '0' }}>
+            Canvas • PRD • GTM Strategy • Features • Validation • Competitive Analysis • Pitch Deck
+          </p>
         </div>
-        <div style={{ padding: '20px', backgroundColor: '#f3f4f6', borderRadius: '8px' }}>
-          <div style={{ fontSize: '24px', marginBottom: '8px' }}>⚡</div>
-          <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>Instant</h3>
-          <p style={{ fontSize: '14px', color: '#666' }}>Generate all artifacts in under 2 seconds</p>
+
+        {/* Form Card */}
+        <div style={{
+          backgroundColor: 'white',
+          borderRadius: '12px',
+          padding: '40px',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
+          marginBottom: '60px',
+        }}>
+          <form onSubmit={handleGenerate} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {/* Problem Statement Input */}
+            <div>
+              <label style={{ display: 'block', marginBottom: '12px', fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>
+                📝 Describe Your Product Idea
+              </label>
+              <textarea
+                value={problemStatement}
+                onChange={(e) => setProblemStatement(e.target.value)}
+                placeholder="e.g., I want to build a productivity tool that helps remote teams collaborate better..."
+                style={{
+                  width: '100%',
+                  padding: '16px',
+                  borderRadius: '8px',
+                  border: '2px solid #e2e8f0',
+                  minHeight: '120px',
+                  fontFamily: 'inherit',
+                  fontSize: '14px',
+                  color: '#334155',
+                  transition: 'border-color 0.2s',
+                  boxSizing: 'border-box',
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = '#2563eb'}
+                onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
+              />
+            </div>
+
+            {/* Category Selection */}
+            <div>
+              <label style={{ display: 'block', marginBottom: '12px', fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>
+                🎯 Product Category
+              </label>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                gap: '10px',
+              }}>
+                {categories.map((cat) => (
+                  <button
+                    key={cat.value}
+                    type="button"
+                    onClick={() => setCategory(cat.label)}
+                    style={{
+                      padding: '12px',
+                      borderRadius: '8px',
+                      border: category === cat.label ? '2px solid #2563eb' : '2px solid #e2e8f0',
+                      backgroundColor: category === cat.label ? '#dbeafe' : '#f8fafc',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      color: category === cat.label ? '#1e40af' : '#475569',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    <div style={{ fontSize: '20px', marginBottom: '4px' }}>{cat.emoji}</div>
+                    <div>{cat.label}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading || !problemStatement.trim() || !category}
+              style={{
+                padding: '16px',
+                backgroundColor: loading || !problemStatement.trim() || !category ? '#cbd5e1' : '#2563eb',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: loading || !problemStatement.trim() || !category ? 'not-allowed' : 'pointer',
+                fontSize: '16px',
+                fontWeight: '600',
+                transition: 'background-color 0.2s',
+                marginTop: '8px',
+              }}
+              onMouseEnter={(e) => {
+                if (!loading && problemStatement.trim() && category) {
+                  e.currentTarget.style.backgroundColor = '#1d4ed8'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!loading && problemStatement.trim() && category) {
+                  e.currentTarget.style.backgroundColor = '#2563eb'
+                }
+              }}
+            >
+              {loading ? '⏳ Generating Artifacts...' : '✨ Generate All 7 Artifacts'}
+            </button>
+          </form>
         </div>
-        <div style={{ padding: '20px', backgroundColor: '#f3f4f6', borderRadius: '8px' }}>
-          <div style={{ fontSize: '24px', marginBottom: '8px' }}>🛟</div>
-          <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>Professional</h3>
-          <p style={{ fontSize: '14px', color: '#666' }}>Export as PDF or Markdown</p>
+
+        {/* Features Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
+          <div style={{
+            padding: '24px',
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+            border: '1px solid #e2e8f0',
+          }}>
+            <div style={{ fontSize: '28px', marginBottom: '12px' }}>📋</div>
+            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>7 Complete Artifacts</h3>
+            <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>
+              Product Canvas, PRD, GTM Strategy, Feature Spec, Validation Plan, Competitive Analysis & Pitch Deck
+            </p>
+          </div>
+
+          <div style={{
+            padding: '24px',
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+            border: '1px solid #e2e8f0',
+          }}>
+            <div style={{ fontSize: '28px', marginBottom: '12px' }}>⚡</div>
+            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>Instant Generation</h3>
+            <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>
+              All artifacts generated in under 2 seconds. No waiting, no delays, pure speed.
+            </p>
+          </div>
+
+          <div style={{
+            padding: '24px',
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+            border: '1px solid #e2e8f0',
+          }}>
+            <div style={{ fontSize: '28px', marginBottom: '12px' }}>🔒</div>
+            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>100% Private</h3>
+            <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>
+              Works completely offline in your browser. Your data never leaves your device.
+            </p>
+          </div>
         </div>
       </div>
     </div>
