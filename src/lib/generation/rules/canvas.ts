@@ -59,12 +59,19 @@ function generateValueProposition(problem: string, keywords: string[]): string {
 function generateTargetAudience(category: ProductCategory, keywords: string[]): string {
   const audienceMap: Record<ProductCategory, string> = {
     saas: 'B2B organizations and teams looking to improve productivity and collaboration',
-    b2c_app: 'Individual consumers seeking personal solutions and lifestyle improvements',
+    mobile_app: 'Mobile users seeking convenience and on-the-go solutions',
+    web_app: 'Desktop and web users seeking modern browser-based tools',
     marketplace: 'Both buyers and sellers looking for trusted transactions',
+    b2c_app: 'Individual consumers seeking personal solutions and lifestyle improvements',
     hardware: 'Tech-savvy early adopters and mainstream consumers',
+    ai_tool: 'Developers, researchers, and product teams',
+    fintech: 'Investors, traders, and financially-conscious consumers',
+    healthcare: 'Patients, healthcare providers, and wellness enthusiasts',
+    edtech: 'Students, educators, and lifelong learners',
+    gaming: 'Gamers and entertainment seekers of all skill levels',
+    social: 'Users seeking community, connection, and self-expression',
     service: 'Service providers and their clients',
     community: 'People with shared interests seeking to connect and collaborate',
-    ai_tool: 'Developers, researchers, and product teams',
   }
 
   return audienceMap[category] || audienceMap.saas
@@ -73,12 +80,19 @@ function generateTargetAudience(category: ProductCategory, keywords: string[]): 
 function generateBusinessModel(category: ProductCategory): string {
   const modelMap: Record<ProductCategory, string> = {
     saas: 'Subscription-based SaaS with tiered pricing (Starter, Professional, Enterprise)',
-    b2c_app: 'Freemium model with premium features and ad-supported tier',
+    mobile_app: 'Freemium with in-app purchases and premium subscriptions',
+    web_app: 'Subscription-based SaaS with usage-based tiers',
     marketplace: 'Commission-based revenue from transactions',
+    b2c_app: 'Freemium model with premium features and ad-supported tier',
     hardware: 'Direct hardware sales with optional subscription services',
+    ai_tool: 'API-based pricing model with usage-based billing',
+    fintech: 'Commission-based fees, subscription tiers, and premium features',
+    healthcare: 'Subscription model with insurance integration and premium services',
+    edtech: 'Freemium courses with premium certification and subscriptions',
+    gaming: 'In-app purchases, battle pass subscriptions, and cosmetics',
+    social: 'Freemium with premium features and sponsored content',
     service: 'Service marketplace with commission on bookings',
     community: 'Freemium community with premium membership and sponsored content',
-    ai_tool: 'API-based pricing model with usage-based billing',
   }
 
   return modelMap[category] || modelMap.saas
