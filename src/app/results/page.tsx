@@ -31,6 +31,7 @@ export default function ResultsPage() {
   const [generation, setGeneration] = useState<Generation | null>(null)
   const [selectedTab, setSelectedTab] = useState<string>('canvas')
   const [loading, setLoading] = useState(true)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     const data = localStorage.getItem('latestGeneration')
@@ -52,8 +53,6 @@ export default function ResultsPage() {
 
   const currentArtifact = generation.artifacts[selectedTab as keyof typeof generation.artifacts]
   const currentTitle = artifactTitles[selectedTab]
-
-  const [copied, setCopied] = useState(false)
   const handleCopy = () => {
     const content = currentArtifact?.content
     if (content) {
