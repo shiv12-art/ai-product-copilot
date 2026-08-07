@@ -35,9 +35,9 @@ export default function Home() {
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
               <div className="text-2xl mb-2">📋</div>
-              <h3 className="font-semibold mb-2">5 Artifacts</h3>
+              <h3 className="font-semibold mb-2">7 Artifacts</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Canvas, PRD, GTM strategy, features, validation plan
+                Canvas, PRD, GTM, Features, Validation, Competitors, Pitch
               </p>
             </div>
             <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
