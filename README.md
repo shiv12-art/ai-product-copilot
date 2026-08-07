@@ -47,12 +47,14 @@ src/
 
 ## ✨ Features
 
-### 5 Professional Artifacts
+### 7 Professional Artifacts
 1. **Product Canvas** - One-page business model overview
 2. **Product Requirements Document (PRD)** - Comprehensive product spec
 3. **Go-to-Market Strategy** - Launch and growth plan
 4. **Feature Specification** - Detailed feature table
 5. **Validation Plan** - Customer discovery and experiments
+6. **Competitive Analysis** - Market landscape & competitor positioning
+7. **Pitch Deck Outline** - 10-slide investor presentation framework
 
 ### Rule-Based Generation
 - No external APIs or AI services

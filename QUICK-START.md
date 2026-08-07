@@ -46,12 +46,14 @@ Homeowners can rent out their unused basement or garage space.
 3. Select a category
 4. Click "Generate Artifacts"
 5. Wait < 2 seconds ✓
-6. View all 5 tabs:
+6. View all 7 tabs:
    - Canvas
    - PRD
    - GTM
    - Features
    - Validation
+   - Competitors
+   - Pitch Deck
 7. Click "Export" and try:
    - PDF (single artifact)
    - PDF (all artifacts)
