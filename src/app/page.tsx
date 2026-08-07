@@ -24,6 +24,34 @@ const categoryMap: Record<string, string> = Object.fromEntries(
   categories.map(c => [c.label, c.value])
 )
 
+const sampleProblems = [
+  {
+    title: 'Remote Team Collaboration',
+    description: 'Teams struggle with asynchronous collaboration, scattered communication, and lack of context when working across time zones.',
+    category: 'SaaS',
+  },
+  {
+    title: 'AI Code Assistant',
+    description: 'Developers spend too much time on boilerplate code and repetitive tasks. They need an AI tool that understands their codebase context.',
+    category: 'AI Tool',
+  },
+  {
+    title: 'Fitness Marketplace',
+    description: 'Fitness professionals are underutilized. We want to create a marketplace connecting certified trainers with people seeking personalized fitness guidance.',
+    category: 'Marketplace',
+  },
+  {
+    title: 'Mental Health Mobile App',
+    description: 'Young adults struggle with anxiety and depression but avoid seeking help. A mobile app offering accessible mental health support could help.',
+    category: 'Mobile App',
+  },
+  {
+    title: 'Fintech Investment Platform',
+    description: 'Millennial investors want to invest fractional shares in diversified portfolios with low fees and social trading features.',
+    category: 'Fintech',
+  },
+]
+
 export default function Home() {
   const router = useRouter()
   const [problemStatement, setProblemStatement] = useState('')
@@ -194,6 +222,46 @@ export default function Home() {
               {loading ? '⏳ Generating Artifacts...' : '✨ Generate All 7 Artifacts'}
             </button>
           </form>
+
+          {/* Sample Problems */}
+          <div style={{ marginTop: '40px', paddingTop: '32px', borderTop: '2px solid #e2e8f0' }}>
+            <p style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '16px' }}>
+              ✨ Try Sample Problems
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
+              {sampleProblems.map((sample, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    setProblemStatement(sample.description)
+                    setCategory(sample.category)
+                  }}
+                  style={{
+                    padding: '12px',
+                    backgroundColor: '#f8fafc',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '12px',
+                    textAlign: 'left',
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#2563eb'
+                    e.currentTarget.style.backgroundColor = '#dbeafe'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#cbd5e1'
+                    e.currentTarget.style.backgroundColor = '#f8fafc'
+                  }}
+                >
+                  <div style={{ fontWeight: '600', color: '#1e293b', marginBottom: '4px' }}>{sample.title}</div>
+                  <div style={{ color: '#64748b', fontSize: '11px' }}>{sample.category}</div>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Features Grid */}
