@@ -1,11 +1,20 @@
-# Local Testing Checklist - AI Product Copilot
+# Testing Checklist - AI Product Copilot
 
-## 🔧 Fixes Applied Before Testing
+## 🚀 Live Production App
+
+**URL:** https://ai-product-copilot-mu.vercel.app
+
+All testing can be done directly on the live production app or locally.
+
+---
+
+## 🔧 Fixes Applied Before Deployment
 
 ### Canvas.ts - FIXED ✅
 **Issue:** Missing channel definitions for 6 new categories (mobile_app, web_app, fintech, healthcare, edtech, gaming, social)
 **Fix:** Added complete `generateChannels()` function entries for all 14 categories
 **Files Modified:** `src/lib/generation/rules/canvas.ts`
+**Status:** Deployed to Vercel ✅
 
 ### All Category Support - VERIFIED ✅
 - **ProductCategory Type:** All 14 categories defined in `src/types/generation.ts`
@@ -20,13 +29,25 @@
 
 ## 🚀 Frontend Testing Workflow
 
+### Choose Your Testing Environment
+
+**Option A: Production (Recommended for Quick Testing)**
+- URL: https://ai-product-copilot-mu.vercel.app
+- No setup needed
+- Start with Phase 1 below
+
+**Option B: Local Dev Server**
+```bash
+npm run dev
+# URL: http://localhost:3000
+```
+
+---
+
 ### Phase 1: Initial Load Test
-1. **Start Dev Server**
-   ```bash
-   npm run dev
-   ```
-   - Expected: "ready - started server on 0.0.0.0:3000"
-   - URL: `http://localhost:3000`
+1. **Open Application**
+   - **Production:** https://ai-product-copilot-mu.vercel.app
+   - **Local:** `http://localhost:3000`
 
 2. **Check Home Page Load**
    - [ ] Page renders without errors
@@ -35,7 +56,7 @@
    - [ ] All 14 category buttons appear in grid
    - [ ] Sample problems section shows 5 examples
 
-3. **Check Browser Console**
+3. **Check Browser Console** (Press F12)
    - [ ] No red errors
    - [ ] No TypeScript errors
    - [ ] No build warnings

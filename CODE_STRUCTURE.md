@@ -1,5 +1,14 @@
 # Code Structure Reference - AI Product Copilot
 
+## 🚀 Production Status
+
+**Live App:** https://ai-product-copilot-mu.vercel.app
+**GitHub:** https://github.com/shiv12-art/ai-product-copilot
+**Latest Commit:** b598ba7 (fix: add missing channel definitions for all 14 categories)
+**Status:** ✅ Deployed and Live
+
+---
+
 ## 📁 Project Directory Tree
 
 ```
