@@ -107,12 +107,19 @@ function generateChannels(category: ProductCategory): string[] {
       'Content marketing and SEO',
       'Strategic partnerships',
     ],
-    b2c_app: [
+    mobile_app: [
       'App Store Optimization (ASO)',
       'Social media marketing',
       'Influencer partnerships',
       'Viral user referral program',
       'Paid ads (Google, Meta)',
+    ],
+    web_app: [
+      'Product Hunt and tech community launches',
+      'Content marketing and SEO',
+      'Paid digital advertising',
+      'Developer partnerships and integrations',
+      'Social media and community engagement',
     ],
     marketplace: [
       'Seller onboarding program',
@@ -121,12 +128,61 @@ function generateChannels(category: ProductCategory): string[] {
       'Partnerships with brands',
       'Content marketing',
     ],
+    b2c_app: [
+      'App Store Optimization (ASO)',
+      'Social media marketing',
+      'Influencer partnerships',
+      'Viral user referral program',
+      'Paid ads (Google, Meta)',
+    ],
     hardware: [
       'E-commerce website',
       'Retail partnerships',
       'Tech review sites',
       'Crowdfunding campaigns',
       'Direct-to-consumer marketing',
+    ],
+    ai_tool: [
+      'Developer documentation',
+      'API marketplace listings',
+      'Developer communities',
+      'Technical partnerships',
+      'Content marketing and tutorials',
+    ],
+    fintech: [
+      'Content marketing and financial education',
+      'Partnerships with financial advisors',
+      'Paid digital advertising',
+      'Social media and community engagement',
+      'Influencer partnerships',
+    ],
+    healthcare: [
+      'Healthcare provider partnerships',
+      'Content marketing and health education',
+      'Insurance integration partnerships',
+      'Wellness community engagement',
+      'Paid digital advertising',
+    ],
+    edtech: [
+      'Content marketing and SEO',
+      'Partnership with educational institutions',
+      'Social media and community engagement',
+      'Influencer partnerships with educators',
+      'Paid digital advertising',
+    ],
+    gaming: [
+      'Social media marketing and streaming platforms',
+      'Gaming influencer partnerships',
+      'Community engagement and Discord',
+      'Paid gaming advertising',
+      'Esports sponsorships and partnerships',
+    ],
+    social: [
+      'Organic viral growth and word-of-mouth',
+      'Influencer partnerships and brand ambassadors',
+      'Paid social media advertising',
+      'Community engagement and content marketing',
+      'Partnerships with content creators',
     ],
     service: [
       'Service provider network',
@@ -141,13 +197,6 @@ function generateChannels(category: ProductCategory): string[] {
       'Partnerships with influencers',
       'Reddit and forum engagement',
       'Email marketing',
-    ],
-    ai_tool: [
-      'Developer documentation',
-      'API marketplace listings',
-      'Developer communities',
-      'Technical partnerships',
-      'Content marketing and tutorials',
     ],
   }
 
