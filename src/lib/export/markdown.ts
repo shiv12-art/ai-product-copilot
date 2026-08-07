@@ -1,7 +1,7 @@
-import { Artifacts } from '@/types/generation'
+type ArtifactInput = Record<string, string | { content: string; editedAt?: string }>
 
 export function generateMarkdown(
-  artifacts: Artifacts,
+  artifacts: ArtifactInput,
   problemStatement: string,
   category: string
 ): string {
@@ -14,7 +14,7 @@ export function generateMarkdown(
 
   markdown += `## Problem Statement\n\n${problemStatement}\n\n---\n\n`
 
-  const artifactTitles: Record<keyof Artifacts, string> = {
+  const artifactTitles: Record<string, string> = {
     canvas: 'Product Canvas',
     prd: 'Product Requirements Document',
     gtm: 'Go-to-Market Strategy',
@@ -22,8 +22,9 @@ export function generateMarkdown(
     validation: 'Validation Plan',
   }
 
-  for (const [key, content] of Object.entries(artifacts)) {
-    const title = artifactTitles[key as keyof Artifacts]
+  for (const [key, value] of Object.entries(artifacts)) {
+    const title = artifactTitles[key] || key
+    const content = typeof value === 'string' ? value : value.content
     markdown += `\n## ${title}\n\n${content}\n\n---\n`
   }
 

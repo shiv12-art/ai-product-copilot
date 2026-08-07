@@ -1,8 +1,9 @@
 import jsPDF from 'jspdf'
-import { Artifacts } from '@/types/generation'
+
+type ArtifactInput = Record<string, string | { content: string; editedAt?: string }>
 
 export function generatePDF(
-  artifacts: Artifacts,
+  artifacts: ArtifactInput,
   problemStatement: string,
   category: string,
   artifactName?: string
@@ -66,7 +67,7 @@ export function generatePDF(
     ? Object.entries(artifacts).filter(([key]) => key === artifactName.toLowerCase().replace(/\s/g, '').split('(')[0].slice(0, 3))
     : Object.entries(artifacts)
 
-  for (const [key, content] of artifactEntries) {
+  for (const [key, value] of artifactEntries) {
     if (yPosition > pageHeight - 40) {
       doc.addPage()
       yPosition = margin
@@ -80,6 +81,7 @@ export function generatePDF(
     addWrappedText(title, 14, true)
     yPosition += 5
 
+    const content = typeof value === 'string' ? value : value.content
     addWrappedText(content, 10)
     yPosition += 10
   }
