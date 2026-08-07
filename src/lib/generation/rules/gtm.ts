@@ -101,6 +101,13 @@ function generatePositioning(category: ProductCategory, keywords: KeywordResult[
     service: 'Position as the platform that connects service providers with customers.',
     community: 'Position as the hub for passionate community members.',
     ai_tool: 'Position as the accessible AI platform for developers.',
+    mobile_app: 'Position as the essential mobile companion for on-the-go productivity and connectivity.',
+    web_app: 'Position as the powerful web platform for seamless cross-device collaboration.',
+    fintech: 'Position as the trusted financial platform for smarter money management.',
+    healthcare: 'Position as the comprehensive healthcare solution improving patient outcomes.',
+    edtech: 'Position as the modern learning platform empowering educators and students.',
+    gaming: 'Position as the ultimate gaming platform for immersive entertainment.',
+    social: 'Position as the vibrant social platform connecting communities worldwide.',
   }
   return positioning[category] || positioning.saas
 }
@@ -114,6 +121,13 @@ function generatePrimarySegment(category: ProductCategory): string {
     service: 'Independent service providers',
     community: 'Online community enthusiasts',
     ai_tool: 'Software developers',
+    mobile_app: 'Mobile-first consumers and commuters',
+    web_app: 'Tech-savvy professionals and startups',
+    fintech: 'Retail investors and small business owners',
+    healthcare: 'Healthcare providers and medical practitioners',
+    edtech: 'Educators and students in academic institutions',
+    gaming: 'Competitive and casual gamers',
+    social: 'Content creators and active social users',
   }
   return segments[category] || segments.saas
 }
@@ -127,6 +141,13 @@ function generateSecondarySegment(category: ProductCategory): string {
     service: 'Large service companies',
     community: 'Content creators',
     ai_tool: 'Data scientists and researchers',
+    mobile_app: 'Enterprises with mobile-first strategies',
+    web_app: 'Enterprise organizations with web operations',
+    fintech: 'Financial advisors and institutions',
+    healthcare: 'Hospital systems and healthcare administrators',
+    edtech: 'School administrators and educational institutions',
+    gaming: 'Game studios and gaming platforms',
+    social: 'Brands and marketing professionals',
   }
   return segments[category] || segments.saas
 }
@@ -140,6 +161,13 @@ function generateCompanySize(category: ProductCategory): string {
     service: '1-100 employees',
     community: 'Any size',
     ai_tool: 'Any size',
+    mobile_app: 'Individual consumers to enterprises',
+    web_app: '1-10,000+ employees',
+    fintech: 'Individual consumers to financial institutions',
+    healthcare: '5-5,000+ employees',
+    edtech: 'Individual educators to large institutions',
+    gaming: 'Individual to enterprise developers',
+    social: 'Individual users to large enterprises',
   }
   return sizes[category] || sizes.saas
 }
@@ -153,6 +181,13 @@ function generateIndustry(category: ProductCategory): string {
     service: 'Professional services, consulting',
     community: 'All niches and interests',
     ai_tool: 'Software and AI-driven companies',
+    mobile_app: 'Consumer apps, retail, productivity',
+    web_app: 'SaaS, enterprise, startups',
+    fintech: 'Finance, investment, banking, payments',
+    healthcare: 'Healthcare, medical, wellness',
+    edtech: 'Education, training, e-learning',
+    gaming: 'Gaming, entertainment, esports',
+    social: 'Social networks, community, media',
   }
   return industries[category] || industries.saas
 }
@@ -166,6 +201,13 @@ function generateBudget(category: ProductCategory): string {
     service: '\$10,000 - \$100,000',
     community: 'Free to premium',
     ai_tool: '\$100 - \$100,000+',
+    mobile_app: '\$0 - \$100/month (consumer)',
+    web_app: '\$10,000 - \$500,000+ annually',
+    fintech: '\$100 - \$100,000+ (variable)',
+    healthcare: '\$50,000 - \$1,000,000+ annually',
+    edtech: '\$0 - \$500,000+ annually',
+    gaming: '\$0 - \$1,000+ annually',
+    social: 'Free to \$20,000+ annually',
   }
   return budgets[category] || budgets.saas
 }
@@ -257,6 +299,123 @@ function generatePricingTiers(category: ProductCategory): string {
 ### Enterprise (Custom)
 - Dedicated infrastructure
 - Custom SLAs`,
+
+    mobile_app: `### Free
+- Core features
+- Limited storage
+- Ad-supported
+
+### Premium (\$2.99/month)
+- Unlimited features
+- Ad-free experience
+- Cloud sync
+
+### Pro (\$9.99/month)
+- Advanced analytics
+- Priority support
+- Early access to features`,
+
+    web_app: `### Starter (\$29/month)
+- Up to 5 users
+- Basic features
+- Community support
+
+### Team (\$99/month)
+- Up to 50 users
+- All features
+- Priority support
+- API access
+
+### Enterprise (Custom)
+- Unlimited users
+- Dedicated support
+- Custom integrations
+- SLA guarantee`,
+
+    fintech: `### Free
+- Basic account features
+- Limited transactions per month
+
+### Basic (\$9.99/month)
+- Unlimited transactions
+- Basic analytics
+
+### Premium (\$29.99/month)
+- Advanced analytics
+- Investment tracking
+- Budget planning tools
+- Priority support
+
+### Enterprise (Custom)
+- White-label solutions
+- API access
+- Dedicated account manager`,
+
+    healthcare: `### Provider (\$99/month)
+- Patient records
+- Appointment scheduling
+- Basic messaging
+
+### Provider Plus (\$299/month)
+- Telemedicine capabilities
+- Advanced analytics
+- Multi-location support
+- HIPAA compliance
+
+### Hospital/Enterprise (Custom)
+- Full EHR system
+- API integrations
+- Custom workflows
+- Dedicated support`,
+
+    edtech: `### Teacher (Free)
+- Basic classroom features
+- Up to 30 students
+
+### School (\$199/month)
+- Unlimited teachers
+- Advanced analytics
+- Student management
+- Parent portal
+
+### District (Custom)
+- Multiple schools
+- Custom content
+- Deep analytics
+- Integration support`,
+
+    gaming: `### Free-to-Play
+- Basic gameplay
+- Limited cosmetics
+
+### Premium Battle Pass (\$9.99)
+- Exclusive cosmetics
+- Event access
+- Tier rewards
+
+### Season Pass (\$49.99)
+- All battle passes
+- Exclusive items
+- Early access
+
+### Cosmetics & DLC (Variable)
+- Skins, emotes, effects
+- Limited-time bundles`,
+
+    social: `### Free
+- All core features
+- Ad-supported
+
+### Premium (\$4.99/month)
+- Ad-free feed
+- Verified badge
+- Advanced analytics
+
+### Creator (\$9.99/month)
+- Monetization tools
+- Advanced analytics
+- Priority support
+- Content hosting`,
   }
 
   return pricingMap[category] || pricingMap.saas

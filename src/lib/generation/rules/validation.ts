@@ -143,6 +143,13 @@ function getChallenge(category: ProductCategory): string {
     service: 'managing services',
     community: 'finding your people',
     ai_tool: 'building AI applications',
+    mobile_app: 'staying productive on-the-go',
+    web_app: 'building web applications',
+    fintech: 'managing your finances',
+    healthcare: 'managing healthcare',
+    edtech: 'learning and teaching',
+    gaming: 'gaming and entertainment',
+    social: 'connecting with others',
   }
   return challenges[category] || 'your workflow'
 }
