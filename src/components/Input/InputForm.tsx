@@ -24,7 +24,7 @@ export function InputForm() {
   const [category, setCategory] = useState('')
   const router = useRouter()
 
-  const handleGenerate = (e: React.FormEvent) => {
+  const handleGenerate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!category) {
       alert('Please select a category')
