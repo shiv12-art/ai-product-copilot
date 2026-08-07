@@ -5,7 +5,6 @@ export async function generateValidationArtifact(
   category: ProductCategory,
   keywords: KeywordResult[]
 ): Promise<string> {
-  const questions = generateValidationQuestions(category)
   const experiments = generateExperiments(category)
   const metrics = generateMetrics(category)
 
