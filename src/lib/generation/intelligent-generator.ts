@@ -216,7 +216,7 @@ function generateCanvas(insights: any, category: string): string {
 ${insights.mainProblem}
 
 ### Pain Points
-${insights.painPoints.map(p => `- ${p}`).join('\n')}
+${insights.painPoints.map((p: string) => `- ${p}`).join('\n')}
 
 ## Solution
 A dedicated ${category.replace('_', ' ')} solution that directly addresses the identified problems and streamlines the user experience.
@@ -263,10 +263,10 @@ ${insights.mainProblem}
 - Time-to-value <24 hours
 
 ## Core Features
-${features.slice(0, 5).map(f => `- **${f}**: Essential capability for user success`).join('\n')}
+${features.slice(0, 5).map((f: string) => `- **${f}**: Essential capability for user success`).join('\n')}
 
 ## Nice-to-Have Features
-${features.slice(5).map(f => `- ${f}`).join('\n')}
+${features.slice(5).map((f: string) => `- ${f}`).join('\n')}
 
 ## Technical Requirements
 - Scalable architecture (horizontal scaling)
@@ -361,7 +361,7 @@ function generateFeatures(insights: any, features: string[], category: string): 
 
 ## Core Features
 
-${features.map((feature, idx) => {
+${features.map((feature: string, idx: number) => {
     const descriptions = {
       'User authentication & SSO': 'Secure login with social and enterprise SSO support',
       'Real-time collaboration': 'Instant sync across all users and devices',
@@ -473,7 +473,7 @@ function generateCompetitive(insights: any, competitors: string[], category: str
 Growing market for ${category.replace('_', ' ')} solutions with increasing demand from ${insights.targetUser.toLowerCase()}.
 
 ## Direct Competitors
-${competitors.slice(0, 5).map(comp => `
+${competitors.slice(0, 5).map((comp: string) => `
 ### ${comp}
 - **Strengths**: Established market presence, feature-rich
 - **Weaknesses**: Complex pricing, learning curve, feature bloat
