@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { generateIntelligentArtifacts } from '@/lib/generation/intelligent-generator'
 
 const categories = [
   { label: 'SaaS', value: 'saas', emoji: '☁️' },
@@ -71,14 +72,20 @@ export default function Home() {
     try {
       const categoryKey = categoryMap[category]
 
+      // Generate intelligent artifacts based on problem statement
+      const generatedContent = generateIntelligentArtifacts({
+        problemStatement,
+        category: categoryKey as any,
+      })
+
       const artifacts = {
-        canvas: { content: `# Product Canvas\n\n## Problem\n${problemStatement}\n\n## Solution\nA comprehensive solution for the identified problem.\n\n## Target Market\n${category} companies seeking innovation.\n\n## Key Features\n- Feature 1\n- Feature 2\n- Feature 3`, editedAt: new Date().toISOString() },
-        prd: { content: `# Product Requirements Document\n\n## Overview\n${problemStatement}\n\n## Requirements\n1. Requirement 1\n2. Requirement 2\n3. Requirement 3\n\n## Success Criteria\n- Metric 1\n- Metric 2\n- Metric 3`, editedAt: new Date().toISOString() },
-        gtm: { content: `# Go-to-Market Strategy\n\n## Strategy for ${category}\n\n### Target Audience\nIdentified target market for ${category}\n\n### Launch Plan\n1. Phase 1: Beta\n2. Phase 2: Launch\n3. Phase 3: Scale\n\n### Success Metrics\n- User acquisition\n- Retention rate\n- Revenue growth`, editedAt: new Date().toISOString() },
-        features: { content: `# Feature Specification\n\n## Core Features\n\n### Feature 1\nDescription and requirements\n\n### Feature 2\nDescription and requirements\n\n### Feature 3\nDescription and requirements\n\n## Technical Stack\n- Frontend\n- Backend\n- Database`, editedAt: new Date().toISOString() },
-        validation: { content: `# Validation Plan\n\n## Key Assumptions\n1. Customers have the problem\n2. Solution addresses problem\n3. Customers willing to pay\n\n## Validation Experiments\n- Customer interviews\n- Landing page tests\n- MVP testing\n\n## Success Criteria\n- 80%+ problem validation\n- 70%+ solution fit\n- 50%+ willing to pay`, editedAt: new Date().toISOString() },
-        competitive: { content: `# Competitive Analysis\n\n## Market Overview\nAnalysis of ${category} market\n\n## Key Competitors\n1. Competitor A\n2. Competitor B\n3. Competitor C\n\n## Competitive Advantage\n- Unique value proposition\n- Technology differentiation\n- Customer experience`, editedAt: new Date().toISOString() },
-        pitch: { content: `# Pitch Deck Outline\n\n## 1. Problem\n${problemStatement}\n\n## 2. Solution\nHow we solve the problem\n\n## 3. Market\nMarket size and opportunity\n\n## 4. Business Model\nHow we make money\n\n## 5. Team\nWho we are\n\n## 6. Financials\nProjections and funding needs`, editedAt: new Date().toISOString() },
+        canvas: { content: generatedContent.canvas, editedAt: new Date().toISOString() },
+        prd: { content: generatedContent.prd, editedAt: new Date().toISOString() },
+        gtm: { content: generatedContent.gtm, editedAt: new Date().toISOString() },
+        features: { content: generatedContent.features, editedAt: new Date().toISOString() },
+        validation: { content: generatedContent.validation, editedAt: new Date().toISOString() },
+        competitive: { content: generatedContent.competitive, editedAt: new Date().toISOString() },
+        pitch: { content: generatedContent.pitch, editedAt: new Date().toISOString() },
       }
 
       const generation = {
