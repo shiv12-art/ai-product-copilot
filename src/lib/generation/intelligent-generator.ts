@@ -523,7 +523,7 @@ function generatePitch(insights: any, category: string): string {
 ${insights.mainProblem}
 
 ### The Pain
-${insights.painPoints.slice(0, 3).map(p => `- ${p}`).join('\n')}
+${insights.painPoints.slice(0, 3).map((p: string) => `- ${p}`).join('\n')}
 
 ### Market Impact
 - Large market experiencing this problem
