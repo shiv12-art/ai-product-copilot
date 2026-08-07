@@ -1,11 +1,18 @@
 export type ProductCategory =
   | 'saas'
-  | 'b2c_app'
+  | 'mobile_app'
+  | 'web_app'
   | 'marketplace'
+  | 'b2c_app'
   | 'hardware'
+  | 'ai_tool'
+  | 'fintech'
+  | 'healthcare'
+  | 'edtech'
+  | 'gaming'
+  | 'social'
   | 'service'
   | 'community'
-  | 'ai_tool'
 
 export interface Artifacts {
   canvas: string
