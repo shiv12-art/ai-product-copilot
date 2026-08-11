@@ -5,6 +5,8 @@ import { generatePRDArtifact } from './rules/prd'
 import { generateGTMArtifact } from './rules/gtm'
 import { generateFeaturesArtifact } from './rules/features'
 import { generateValidationArtifact } from './rules/validation'
+import { generateCompetitiveArtifact } from './rules/competitive'
+import { generateMetricsArtifact } from './rules/metrics'
 import { generateUUID } from '@/lib/utils/uuid'
 
 export async function generateArtifacts(
@@ -17,13 +19,15 @@ export async function generateArtifacts(
   // Extract keywords from problem statement
   const keywords = extractKeywords(problemStatement)
 
-  // Generate all 5 artifacts in parallel
-  const [canvas, prd, gtm, features, validation] = await Promise.all([
+  // Generate all 7 artifacts in parallel
+  const [canvas, prd, gtm, features, validation, competitive, metrics] = await Promise.all([
     generateCanvasArtifact(problemStatement, category, keywords),
     generatePRDArtifact(problemStatement, category, keywords),
     generateGTMArtifact(problemStatement, category, keywords),
     generateFeaturesArtifact(problemStatement, category, keywords),
     generateValidationArtifact(problemStatement, category, keywords),
+    generateCompetitiveArtifact(problemStatement, category, keywords),
+    generateMetricsArtifact(problemStatement, category, keywords),
   ])
 
   const generation: Generation = {
@@ -38,6 +42,8 @@ export async function generateArtifacts(
       gtm: { content: gtm },
       features: { content: features },
       validation: { content: validation },
+      competitive: { content: competitive },
+      metrics: { content: metrics },
     },
     isBookmarked: false,
   }

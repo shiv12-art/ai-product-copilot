@@ -44,7 +44,7 @@ export const ARTIFACT_DESCRIPTIONS = {
   validation: 'Customer discovery and experiment plan to validate assumptions',
 } as const
 
-export const MAX_GENERATIONS = 10
+export const MAX_GENERATIONS = 100
 export const MAX_PROBLEM_LENGTH = 2000
 export const MIN_PROBLEM_LENGTH = 50
 
@@ -52,7 +52,13 @@ export const STORAGE_KEYS = {
   generations: 'apc_generations',
   settings: 'apc_settings',
   lastVisited: 'apc_lastVisited',
+  shareTokens: 'apc_share_tokens',
+  userFeedback: 'apc_user_feedback',
+  generationAnalytics: 'apc_generation_analytics',
+  schemaVersion: 'apc_schema_version',
 } as const
+
+export const SCHEMA_VERSION = 2
 
 export const STOP_WORDS = new Set([
   'the',
