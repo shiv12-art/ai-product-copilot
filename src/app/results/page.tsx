@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useGenerationStore } from '@/lib/storage/generationStore'
-import { Generation } from '@/types/generation'
+import { Generation, Feedback } from '@/types/generation'
 import { Button } from '@/components/UI/Button'
 import { Card } from '@/components/UI/Card'
 import { Badge } from '@/components/UI/Badge'
 import { ShareDialog } from '@/components/Share/ShareDialog'
 import { ExportMenu } from '@/components/Export/ExportMenu'
+import { FeedbackPrompt, FeedbackDisplay } from '@/components/Feedback'
 
 const ARTIFACT_CONFIG: Record<string, { title: string; emoji: string; description: string }> = {
   canvas: { title: 'Product Canvas', emoji: '📋', description: 'Business model overview' },
@@ -50,6 +51,7 @@ export default function ResultsPage() {
   const [shareDialogOpen, setShareDialogOpen] = useState(false)
   const [shareUrl, setShareUrl] = useState('')
   const [exportMenuOpen, setExportMenuOpen] = useState(false)
+  const [showFeedbackPrompt, setShowFeedbackPrompt] = useState(false)
 
   useEffect(() => {
     const id = searchParams.get('id')
@@ -72,6 +74,17 @@ export default function ResultsPage() {
     }
     setLoading(false)
   }, [router, searchParams, getGeneration, setCurrentGeneration])
+
+  // Show feedback prompt after 15 seconds if not already rated
+  useEffect(() => {
+    if (!generation || generation.feedback?.rating) return
+
+    const timer = setTimeout(() => {
+      setShowFeedbackPrompt(true)
+    }, 15000)
+
+    return () => clearTimeout(timer)
+  }, [generation])
 
   if (loading) {
     return (
@@ -119,6 +132,16 @@ export default function ResultsPage() {
       deleteGeneration(generation.id)
       router.push('/projects')
     }
+  }
+
+  const handleFeedbackSubmit = async (rating: number, comment: string) => {
+    const feedback: Feedback = {
+      rating: rating as 1 | 2 | 3 | 4 | 5,
+      comment: comment || undefined,
+      submittedAt: new Date().toISOString(),
+    }
+    useGenerationStore.getState().submitFeedback(generation.id, feedback)
+    setGeneration({ ...generation, feedback })
   }
 
   return (
@@ -248,6 +271,9 @@ export default function ResultsPage() {
               </div>
             </Card>
 
+            {/* Feedback Display */}
+            {generation.feedback?.rating && <FeedbackDisplay feedback={generation.feedback} />}
+
             {/* Project Info Card */}
             <Card variant="elevated">
               <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Project Info</h3>
@@ -268,12 +294,6 @@ export default function ResultsPage() {
                   <div>
                     <p className="text-gray-600 dark:text-gray-400">Views</p>
                     <p className="font-medium text-gray-900 dark:text-white">{generation.viewCount}</p>
-                  </div>
-                ) : null}
-                {generation.feedback?.rating ? (
-                  <div>
-                    <p className="text-gray-600 dark:text-gray-400">Rating</p>
-                    <p className="font-medium text-cyan-500">★ {generation.feedback.rating}/5</p>
                   </div>
                 ) : null}
               </div>
@@ -303,6 +323,13 @@ export default function ResultsPage() {
         isOpen={exportMenuOpen}
         onClose={() => setExportMenuOpen(false)}
         generation={generation}
+      />
+
+      {/* Feedback Prompt */}
+      <FeedbackPrompt
+        isVisible={showFeedbackPrompt}
+        onClose={() => setShowFeedbackPrompt(false)}
+        onSubmit={handleFeedbackSubmit}
       />
     </div>
   )
