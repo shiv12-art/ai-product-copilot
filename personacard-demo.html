@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PersonaCard Component - Live Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --text: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --primary: #0891b2;
+            --primary-dark: #0891b2;
+            --blue-50: #eff6ff;
+            --blue-100: #dbeafe;
+            --blue-200: #bfdbfe;
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            --blue-800: #1e40af;
+            --blue-900: #1e3a8a;
+            --purple-50: #faf5ff;
+            --purple-100: #f3e8ff;
+            --purple-500: #a855f7;
+            --purple-600: #9333ea;
+            --purple-700: #7e22ce;
+            --purple-800: #6b21a8;
+            --purple-900: #581c87;
+            --green-50: #f0fdf4;
+            --green-500: #22c55e;
+            --green-700: #15803d;
+            --red-50: #fef2f2;
+            --red-200: #fecaca;
+            --red-700: #b91c1c;
+            --red-800: #991b1b;
+            --amber-50: #fffbeb;
+            --amber-500: #f59e0b;
+            --amber-700: #b45309;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --bg-secondary: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #334155;
+            --blue-50: #0c2340;
+            --blue-100: #1e3a5f;
+            --blue-600: #3b82f6;
+            --blue-700: #2563eb;
+            --blue-800: #1d4ed8;
+            --blue-900: #1e40af;
+            --purple-50: #3f0f5c;
+            --purple-500: #d946ef;
+            --purple-600: #c026d3;
+            --purple-700: #a21caf;
+            --purple-800: #86198f;
+            --purple-900: #581c87;
+            --green-50: #064e3b;
+            --green-500: #22c55e;
+            --green-700: #15803d;
+            --red-50: #7f1d1d;
+            --red-200: #fca5a5;
+            --red-700: #dc2626;
+            --red-800: #b91c1c;
+            --amber-50: #78350f;
+            --amber-500: #f59e0b;
+            --amber-700: #b45309;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn.active {
+            background: var(--blue-700);
+            box-shadow: 0 0 0 3px var(--blue-200);
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .category-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .category-btn:hover {
+            border-color: var(--primary);
+            background: var(--blue-50);
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* PersonaCard Styling */
+        .personas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .persona-card {
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--primary);
+        }
+
+        .persona-card:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
+        }
+
+        /* Type-specific colors */
+        .persona-card.primary {
+            border-left-color: var(--blue-600);
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--blue-50) 100%);
+        }
+
+        .persona-card.secondary {
+            border-left-color: var(--purple-600);
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--purple-50) 100%);
+        }
+
+        .persona-card.tertiary {
+            border-left-color: #9ca3af;
+            background: var(--bg-secondary);
+        }
+
+        .persona-card[data-theme="dark"].primary {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, #1e3a5f 100%);
+        }
+
+        .persona-card[data-theme="dark"].secondary {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, #3f0f5c 100%);
+        }
+
+        .persona-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .persona-name {
+            flex: 1;
+        }
+
+        .persona-name h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .persona-name p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .persona-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .persona-badge.primary {
+            background: var(--blue-100);
+            color: var(--blue-900);
+        }
+
+        .persona-badge.secondary {
+            background: var(--purple-100);
+            color: var(--purple-900);
+        }
+
+        .persona-badge.tertiary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .persona-badge[data-theme="dark"].primary {
+            background: var(--blue-900);
+            color: var(--blue-200);
+        }
+
+        .persona-badge[data-theme="dark"].secondary {
+            background: var(--purple-900);
+            color: var(--purple-200);
+        }
+
+        .persona-badge[data-theme="dark"].tertiary {
+            background: #374151;
+            color: #e5e7eb;
+        }
+
+        .persona-section {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .persona-section-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .goal-box {
+            background: white;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+        }
+
+        .goal-box[data-theme="dark"] {
+            background: #1e293b;
+            border-color: #475569;
+            color: var(--text);
+        }
+
+        .goal-box p {
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .job-context {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .job-item {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+        }
+
+        .job-item[data-theme="dark"] {
+            background: #1e293b;
+            border-color: #475569;
+        }
+
+        .job-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .job-value {
+            font-size: 0.875rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .budget-box {
+            background: linear-gradient(135deg, var(--green-50) 0%, rgba(34, 197, 94, 0.05) 100%);
+            border: 1px solid #bbf7d0;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+        }
+
+        .budget-box[data-theme="dark"] {
+            background: linear-gradient(135deg, #064e3b 0%, rgba(34, 197, 94, 0.1) 100%);
+            border-color: #059669;
+        }
+
+        .budget-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--green-700);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .budget-label[data-theme="dark"] {
+            color: var(--green-500);
+        }
+
+        .budget-value {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--green-700);
+        }
+
+        .budget-value[data-theme="dark"] {
+            color: var(--green-500);
+        }
+
+        .pain-points, .success-metrics, .objections {
+            list-style: none;
+        }
+
+        .pain-points li, .success-metrics li, .objections li {
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .pain-points li:last-child, .success-metrics li:last-child, .objections li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .pain-point-item {
+            background: var(--red-50);
+            border: 1px solid #fecaca;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pain-point-item[data-theme="dark"] {
+            background: #7f1d1d;
+            border-color: #991b1b;
+        }
+
+        .pain-point-title {
+            font-weight: 600;
+            color: var(--red-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .pain-point-title[data-theme="dark"] {
+            color: #fca5a5;
+        }
+
+        .pain-point-desc {
+            font-size: 0.8125rem;
+            color: var(--red-700);
+        }
+
+        .pain-point-desc[data-theme="dark"] {
+            color: #fecaca;
+        }
+
+        .success-item {
+            color: var(--green-700);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .success-item[data-theme="dark"] {
+            color: var(--green-500);
+        }
+
+        .objection-item {
+            color: var(--amber-700);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .objection-item[data-theme="dark"] {
+            color: var(--amber-500);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 100;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+
+        .info-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-box h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .info-box p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.75rem;
+            }
+
+            .personas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .job-context {
+                grid-template-columns: 1fr;
+            }
+
+            .category-tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+
+    <header>
+        <h1>🎨 PersonaCard Component Demo</h1>
+        <p>Beautiful, scannable persona cards for your product artifacts</p>
+    </header>
+
+    <main>
+        <!-- Info Box -->
+        <div class="info-box">
+            <h3>✨ What You're Seeing</h3>
+            <p>
+                This is a live HTML mockup of the React PersonaCard component. Each card displays a persona with color-coded design,
+                structured information sections, and professional styling. Switch between light and dark mode using the button in the
+                top-right corner.
+            </p>
+        </div>
+
+        <!-- Category Selector -->
+        <div style="margin-bottom: 2rem;">
+            <h2 style="margin-bottom: 1rem;">Select Category</h2>
+            <div class="category-tabs">
+                <button class="category-btn active" onclick="showCategory('saas')">📊 SaaS</button>
+                <button class="category-btn" onclick="showCategory('b2c')">📱 B2C App</button>
+                <button class="category-btn" onclick="showCategory('marketplace')">🛍️ Marketplace</button>
+                <button class="category-btn" onclick="showCategory('ai')">🤖 AI Tool</button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Personas</div>
+                <div class="stat-value">5</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Primary Users</div>
+                <div class="stat-value" style="color: var(--blue-600);">1-2</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Secondary Users</div>
+                <div class="stat-value" style="color: var(--purple-600);">2-3</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Tertiary Users</div>
+                <div class="stat-value" style="color: #9ca3af;">1</div>
+            </div>
+        </div>
+
+        <!-- SaaS Personas -->
+        <div id="saas-personas" class="personas-grid">
+            <!-- Persona 1: Primary -->
+            <div class="persona-card primary" data-theme="light">
+                <div class="persona-header">
+                    <div class="persona-name">
+                        <h3>Sarah Chen</h3>
+                        <p>VP Product @ Series A Startup</p>
+                    </div>
+                    <div class="persona-badge primary">
+                        <span>⭐</span> Primary
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">🎯 Primary Goal</div>
+                    <div class="goal-box" data-theme="light">
+                        <p>Validate product-market fit and prioritize features strategically</p>
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">📋 Job Context</div>
+                    <div class="job-context">
+                        <div class="job-item" data-theme="light">
+                            <div class="job-label">Department</div>
+                            <div class="job-value">Product</div>
+                        </div>
+                        <div class="job-item" data-theme="light">
+                            <div class="job-label">Team Size</div>
+                            <div class="job-value">3-5 PMs</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="budget-box">
+                        <div class="budget-label">💰 Budget Authority</div>
+                        <div class="budget-value">Controls $500K/year</div>
+                        <div style="font-size: 0.8rem; color: var(--green-700); margin-top: 0.25rem;">
+                            Reports to: VP Eng + CEO
+                        </div>
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">🚫 Key Pain Points</div>
+                    <ul class="pain-points">
+                        <li>
+                            <div class="pain-point-item" data-theme="light">
+                                <div class="pain-point-title">1. Scattered Requirements</div>
+                                <div class="pain-point-desc">Feedback scattered across Slack/Intercom/sheets</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="pain-point-item" data-theme="light">
+                                <div class="pain-point-title">2. Competitive Blind Spot</div>
+                                <div class="pain-point-desc">Takes 2+ weeks to compile competitive analysis</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="pain-point-item" data-theme="light">
+                                <div class="pain-point-title">3. Investor Pressure</div>
+                                <div class="pain-point-desc">Must justify direction to VCs without clear data</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">✅ Success Metrics</div>
+                    <ul class="success-metrics">
+                        <li><span class="success-item">▸ Feature adoption > 60%</span></li>
+                        <li><span class="success-item">▸ NPS improvement > 5 pts/quarter</span></li>
+                        <li><span class="success-item">▸ Revenue per user +20%</span></li>
+                    </ul>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">⚠️ Typical Objections</div>
+                    <ul class="objections">
+                        <li><span class="objection-item">▸ "We use Jira already"</span></li>
+                        <li><span class="objection-item">▸ "Takes 3+ weeks to implement"</span></li>
+                        <li><span class="objection-item">▸ "Team resistant to new tools"</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Persona 2: Secondary -->
+            <div class="persona-card secondary" data-theme="light">
+                <div class="persona-header">
+                    <div class="persona-name">
+                        <h3>Marcus Rodriguez</h3>
+                        <p>Engineering Manager @ 50-person SaaS</p>
+                    </div>
+                    <div class="persona-badge secondary">
+                        <span>◆</span> Secondary
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">🎯 Primary Goal</div>
+                    <div class="goal-box" data-theme="light">
+                        <p>Ship features on time while maintaining code quality</p>
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">📋 Job Context</div>
+                    <div class="job-context">
+                        <div class="job-item" data-theme="light">
+                            <div class="job-label">Department</div>
+                            <div class="job-value">Engineering</div>
+                        </div>
+                        <div class="job-item" data-theme="light">
+                            <div class="job-label">Team Size</div>
+                            <div class="job-value">8-12 engineers</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="budget-box">
+                        <div class="budget-label">💰 Budget Authority</div>
+                        <div class="budget-value">$50K/year eng tools</div>
+                        <div style="font-size: 0.8rem; color: var(--green-700); margin-top: 0.25rem;">
+                            Reports to: VP Engineering
+                        </div>
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">🚫 Key Pain Points</div>
+                    <ul class="pain-points">
+                        <li>
+                            <div class="pain-point-item" data-theme="light">
+                                <div class="pain-point-title">1. Ambiguous Requirements</div>
+                                <div class="pain-point-desc">PRDs lack acceptance criteria; multiple rework cycles</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="pain-point-item" data-theme="light">
+                                <div class="pain-point-title">2. Context Switching</div>
+                                <div class="pain-point-desc">Engineers constantly switching between features & bugs</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="pain-point-item" data-theme="light">
+                                <div class="pain-point-title">3. Unpredictable Velocity</div>
+                                <div class="pain-point-desc">Hard to estimate sprints due to scope creep</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">✅ Success Metrics</div>
+                    <ul class="success-metrics">
+                        <li><span class="success-item">▸ Sprint velocity consistency +40%</span></li>
+                        <li><span class="success-item">▸ Bug escape rate < 2%</span></li>
+                        <li><span class="success-item">▸ On-time delivery > 90%</span></li>
+                    </ul>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">⚠️ Typical Objections</div>
+                    <ul class="objections">
+                        <li><span class="objection-item">▸ "Requires engineering buy-in"</span></li>
+                        <li><span class="objection-item">▸ "Another tool = more Slack notifications"</span></li>
+                        <li><span class="objection-item">▸ "Jira already covers project management"</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Persona 3: Tertiary -->
+            <div class="persona-card tertiary" data-theme="light">
+                <div class="persona-header">
+                    <div class="persona-name">
+                        <h3>James Park</h3>
+                        <p>Founder/CEO of Bootstrap SaaS</p>
+                    </div>
+                    <div class="persona-badge tertiary">
+                        <span>○</span> Tertiary
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">🎯 Primary Goal</div>
+                    <div class="goal-box" data-theme="light">
+                        <p>Wear multiple hats efficiently without hiring full product team</p>
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">📋 Job Context</div>
+                    <div class="job-context">
+                        <div class="job-item" data-theme="light">
+                            <div class="job-label">Department</div>
+                            <div class="job-value">Executive</div>
+                        </div>
+                        <div class="job-item" data-theme="light">
+                            <div class="job-label">Team Size</div>
+                            <div class="job-value">3-5 person</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="budget-box">
+                        <div class="budget-label">💰 Budget Authority</div>
+                        <div class="budget-value">$30K/month discretion</div>
+                        <div style="font-size: 0.8rem; color: var(--green-700); margin-top: 0.25rem;">
+                            Reports to: Investors
+                        </div>
+                    </div>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">🚫 Key Pain Points</div>
+                    <ul class="pain-points">
+                        <li>
+                            <div class="pain-point-item" data-theme="light">
+                                <div class="pain-point-title">1. No Time for Strategy</div>
+                                <div class="pain-point-desc">80% ops/sales, 20% product</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="pain-point-item" data-theme="light">
+                                <div class="pain-point-title">2. Feedback Black Hole</div>
+                                <div class="pain-point-desc">Customer calls/emails not aggregated</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="pain-point-item" data-theme="light">
+                                <div class="pain-point-title">3. No Data on What Works</div>
+                                <div class="pain-point-desc">Guessing on features, no analytics</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">✅ Success Metrics</div>
+                    <ul class="success-metrics">
+                        <li><span class="success-item">▸ Reduce decision time by 5x</span></li>
+                        <li><span class="success-item">▸ Customer retention +30%</span></li>
+                        <li><span class="success-item">▸ Survive to Series A</span></li>
+                    </ul>
+                </div>
+
+                <div class="persona-section">
+                    <div class="persona-section-title">⚠️ Typical Objections</div>
+                    <ul class="objections">
+                        <li><span class="objection-item">▸ "Cost must be < $99/month"</span></li>
+                        <li><span class="objection-item">▸ "Zero setup time needed"</span></li>
+                        <li><span class="objection-item">▸ "No time for training"</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Info -->
+        <div class="info-box" style="margin-top: 3rem;">
+            <h3>✨ Component Features</h3>
+            <p>
+                <strong>Visual Design:</strong> Color-coded by persona type (Primary=Blue, Secondary=Purple, Tertiary=Gray),
+                dark mode support, smooth hover animations, responsive grid layout.
+                <br><br>
+                <strong>Data Display:</strong> Name, role, goal statement, department, team size, budget authority,
+                pain points with descriptions, success metrics, typical objections.
+                <br><br>
+                <strong>Interactivity:</strong> Filter by persona type, click to highlight, summary statistics dashboard,
+                key insights callouts.
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <p>🎨 PersonaCard React Component - Ready for Production</p>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem;">Integration Guide: See PERSONACARD_IMPLEMENTATION_GUIDE.md</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+
+            // Update all persona cards theme
+            document.querySelectorAll('.persona-card').forEach(card => {
+                card.setAttribute('data-theme', newTheme);
+            });
+
+            // Update all job items theme
+            document.querySelectorAll('.job-item, .goal-box, .pain-point-item').forEach(el => {
+                el.setAttribute('data-theme', newTheme);
+            });
+
+            // Update button
+            const btn = document.querySelector('.theme-toggle');
+            btn.textContent = isDark ? '🌙 Dark Mode' : '☀️ Light Mode';
+
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function showCategory(cat) {
+            // Update tab buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // For now, just show message
+            alert('Category: ' + cat.toUpperCase() + '\n\nIn the full React component, personas would update based on category.');
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.querySelectorAll('.persona-card').forEach(card => {
+            card.setAttribute('data-theme', savedTheme);
+        });
+        document.querySelectorAll('.job-item, .goal-box, .pain-point-item').forEach(el => {
+            el.setAttribute('data-theme', savedTheme);
+        });
+        const btn = document.querySelector('.theme-toggle');
+        btn.textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    </script>
+</body>
+</html>

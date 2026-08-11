@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Product Copilot - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --text: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --primary: #06b6d4;
+            --primary-dark: #0891b2;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --bg-secondary: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #334155;
+            --primary: #06b6d4;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            color: white;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            background: var(--bg);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .category-btn {
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .category-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .artifacts-section {
+            display: none;
+        }
+
+        .artifacts-section.show {
+            display: block;
+        }
+
+        .artifact-tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .artifact-tab {
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .artifact-tab:hover {
+            border-color: var(--primary);
+        }
+
+        .artifact-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .artifact-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            min-height: 300px;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+
+        .artifact-content pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .copy-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--border);
+        }
+
+        .copy-btn.copied {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.2rem;
+            }
+
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <header>
+        <h1>🚀 AI Product Copilot</h1>
+        <button class="theme-toggle" onclick="toggleTheme()" style="cursor: pointer;">🌙 Dark Mode</button>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>Generate Professional Product Strategy Artifacts</h2>
+            <p>Powered by enhanced knowledge base with 75+ personas, real competitors & category-specific GTM strategies</p>
+        </section>
+
+        <section class="form-section">
+            <div class="form-group">
+                <label for="problem">Problem Statement</label>
+                <textarea id="problem" placeholder="Describe your product idea or problem you're solving..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Select Category</label>
+                <div class="categories" id="categories"></div>
+            </div>
+
+            <button class="btn" onclick="generateArtifacts()">Generate Artifacts</button>
+            <div class="success-message" id="successMsg">✓ Artifacts generated successfully!</div>
+        </section>
+
+        <section class="artifacts-section" id="artifactsSection">
+            <div class="actions">
+                <button class="copy-btn" onclick="copyArtifact()">📋 Copy Selected Artifact</button>
+                <button class="copy-btn" onclick="copyAll()">📋 Copy All Artifacts</button>
+            </div>
+
+            <div class="artifact-tabs" id="tabs"></div>
+            <div class="artifact-content" id="content"></div>
+        </section>
+
+        <div class="loading" id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Generating artifacts...</p>
+        </div>
+    </main>
+
+    <script>
+        const CATEGORIES = [
+            'SaaS', 'B2C App', 'Marketplace', 'Hardware', 'Service',
+            'Community', 'AI Tool', 'Mobile App', 'Web App', 'FinTech',
+            'Healthcare', 'EdTech', 'Gaming', 'Social'
+        ];
+
+        const ARTIFACTS = {
+            'SaaS': {
+                'Canvas': 'Product Canvas: Enterprise-grade work management platform for distributed teams',
+                'PRD': 'Enhanced PRD with 5 personas:\n- VP Product at Series A: Controls $500K budget\n- Engineering Manager: Owns $50K tool budget\n- Founder/CEO: $30K/month discretion\n- Product Designer: $150K/year design budget\n- Product Ops Manager: $100K/year systems budget\n\nKey Success Metrics: Feature adoption > 60%, NPS improvement > 5 points, Revenue per user +20%',
+                'GTM': 'Go-to-Market Strategy: "Land & Expand" Motion\n\nDistribution Channels:\n1. Product-Led Growth (free trial)\n2. Direct Sales (LinkedIn outreach)\n3. Partner Ecosystem (integrations)\n4. Content Marketing (blogs, webinars)\n5. Community (forums, Slack)\n\nSales: Hybrid model - Self-serve + Sales-assisted + Enterprise',
+                'Features': 'Top Features (by Value/Effort):\n1. Role-Based Access Control - Core, High value\n2. Real-Time Collaboration - Core, High value\n3. Custom Dashboard Builder - MVP, High value\n4. CRM/Analytics Integrations - Advanced, Medium value\n5. Automated Roadmap Alignment - Advanced, Medium value',
+                'Validation': 'Validation Plan:\n- Interview 20 PMs at Series A+ companies\n- Run 2-week beta with 5 early customers\n- Measure feature adoption and NPS\n- Validate GTM channels with 10 outreach tests',
+                'Competitive': 'Competitors with real market data:\n\n1. Asana - $10.99-24.99/user/month, Enterprise-focused\n   Strengths: Mature, strong sales\n   Weakness: Steep learning curve\n   Our advantage: Faster implementation\n\n2. Monday.com - $9-16/user/month, Visual OS\n   Strengths: Beautiful UI\n   Weakness: Slow at scale\n   Our advantage: Better performance\n\n3. Notion - $8-16/user/month, All-in-one workspace\n   Strengths: Flexible, generous free tier\n   Weakness: Not purpose-built\n   Our advantage: Purpose-built for product strategy',
+                'Metrics': 'Success Metrics:\n- CAC (Customer Acquisition Cost): Target < $1000\n- LTV (Lifetime Value): Target > $30K\n- D30 Retention: Target > 60%\n- NPS: Target > 50\n- Feature Adoption: Target > 60%'
+            },
+            'B2C App': {
+                'Canvas': 'Product Canvas: Gamified habit tracking app with social accountability',
+                'PRD': 'Enhanced PRD with 3 personas:\n- Sophie Lee: Solo indie hacker, $2-5K bootstrap budget\n- Michael Torres: Growth manager, $50K/year growth budget\n- Emma Ramirez: PM at Series B, $200K/year tools budget',
+                'GTM': 'Go-to-Market: "Viral & Freemium" Motion\n\nDistribution:\n1. App Store Optimization (ASO)\n2. Social media (TikTok, Instagram)\n3. Influencer partnerships (micro-influencers)\n4. Paid UA (Facebook/Instagram ads)\n5. Referral incentives',
+                'Features': 'Top Features:\n1. Social Onboarding (Apple/Google sign-in) - Core\n2. Personalized Activity Feed - Core, drives retention\n3. Smart Push Notifications - MVP, reduces churn\n4. Habit Tracking Dashboard - Core\n5. Social Accountability Features - Advanced',
+                'Validation': 'Validation Plan:\n- Launch to 1000 beta users\n- Measure D7 and D30 retention\n- Test 3 monetization models\n- Survey users on motivation drivers',
+                'Competitive': 'Main competitors:\n- Duolingo: Gamified learning, strong retention\n- Habit Tracker apps: Simple tracking\n\nOur advantage: Social accountability angle + modern design',
+                'Metrics': 'D7 Retention: 35%+, D30: 20%+, LTV/CAC: 3x+, Premium conversion: 2%+'
+            },
+            'Marketplace': {
+                'Canvas': 'Product Canvas: Platform connecting local service providers with customers',
+                'PRD': 'Enhanced PRD with 2 personas:\n- Emma Davis: Marketplace director, $500K/year budget\n- Lucas Garcia: Full-time seller, < $200/month tools budget',
+                'GTM': 'Go-to-Market: "Network Effects" Motion\n\nDual-sided acquisition:\n1. Supply-side: Direct seller recruitment\n2. Demand-side: Paid buyer acquisition\n3. SEO for service discovery\n4. Word-of-mouth from quality transactions\n5. Seller success partnerships',
+                'Features': 'Top Features:\n1. Trust & Verification System - Core (background checks, ID verification)\n2. Intelligent Search & Discovery - Core (personalized recommendations)\n3. Secure Payment Processing - Core (escrow, dispute resolution)\n4. Seller Rating System - Core (builds trust)\n5. In-app Messaging - MVP',
+                'Validation': 'Validation Plan:\n- Recruit 50 service providers\n- Acquire 200 customers through paid ads\n- Measure take rate and seller retention\n- Track fraud metrics closely',
+                'Competitive': 'Main competitors:\n- Etsy: 5-15% commission, handmade focus\n- Shopify: $29-2300/month, e-commerce focus\n\nOur advantage: Local services focus + easier onboarding',
+                'Metrics': 'GMV growth 30% YoY, Fraud rate < 0.5%, Seller NPS > 60, Take rate > 10%'
+            }
+        };
+
+        function initCategories() {
+            const container = document.getElementById('categories');
+            CATEGORIES.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'category-btn';
+                btn.textContent = cat;
+                btn.onclick = () => selectCategory(cat, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        let selectedCategory = null;
+
+        function selectCategory(category, btn) {
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedCategory = category;
+        }
+
+        function generateArtifacts() {
+            const problem = document.getElementById('problem').value;
+            if (!problem) {
+                alert('Please enter a problem statement');
+                return;
+            }
+            if (!selectedCategory) {
+                alert('Please select a category');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('artifactsSection').classList.remove('show');
+
+            setTimeout(() => {
+                const artifacts = ARTIFACTS[selectedCategory] || ARTIFACTS['SaaS'];
+                renderArtifacts(artifacts, problem);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('artifactsSection').classList.add('show');
+                document.getElementById('successMsg').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('successMsg').classList.remove('show');
+                }, 3000);
+            }, 1500);
+        }
+
+        function renderArtifacts(artifacts, problem) {
+            const tabsContainer = document.getElementById('tabs');
+            const contentContainer = document.getElementById('content');
+            tabsContainer.innerHTML = '';
+
+            let first = true;
+            Object.keys(artifacts).forEach(name => {
+                const tab = document.createElement('button');
+                tab.className = 'artifact-tab' + (first ? ' active' : '');
+                tab.textContent = name;
+                tab.onclick = function() { showArtifact(name, artifacts, this); };
+                tabsContainer.appendChild(tab);
+                first = false;
+            });
+
+            const firstTab = tabsContainer.querySelector('.artifact-tab');
+            showArtifact(Object.keys(artifacts)[0], artifacts, firstTab);
+        }
+
+        function showArtifact(name, artifacts, tabElement) {
+            document.querySelectorAll('.artifact-tab').forEach(t => t.classList.remove('active'));
+            if (tabElement) {
+                tabElement.classList.add('active');
+            }
+
+            const content = document.getElementById('content');
+            content.innerHTML = `<pre>${artifacts[name]}</pre>`;
+        }
+
+        function copyArtifact() {
+            const content = document.getElementById('content').innerText;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = document.querySelector('.actions .copy-btn:first-child');
+                showCopyFeedback(btn);
+            });
+        }
+
+        function copyAll() {
+            const problem = document.getElementById('problem').value;
+            const artifacts = ARTIFACTS[selectedCategory] || ARTIFACTS['SaaS'];
+            let allText = `Problem: ${problem}\nCategory: ${selectedCategory}\n\n`;
+            Object.entries(artifacts).forEach(([name, content]) => {
+                allText += `=== ${name} ===\n${content}\n\n`;
+            });
+            navigator.clipboard.writeText(allText).then(() => {
+                const buttons = document.querySelectorAll('.actions .copy-btn');
+                const btn = buttons[buttons.length - 1];
+                showCopyFeedback(btn);
+            });
+        }
+
+        function showCopyFeedback(btn) {
+            const originalText = btn.textContent;
+            btn.classList.add('copied');
+            btn.textContent = '✓ Copied!';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.textContent = originalText;
+            }, 2000);
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            const btn = document.querySelector('.theme-toggle');
+            btn.textContent = isDark ? '🌙 Dark Mode' : '☀️ Light Mode';
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') {
+            document.querySelector('.theme-toggle').textContent = '☀️ Light Mode';
+        }
+
+        // Initialize on load
+        window.addEventListener('load', initCategories);
+    </script>
+</body>
+</html>
