@@ -106,7 +106,7 @@ Read-Host
 
 Write-InfoMsg "Starting dev server..."
 Write-InfoMsg "App will be at http://localhost:3000"
-Write-InfoMsg "Press Ctrl+C to stop"
+Write-InfoMsg "Press Control+C to stop"
 Write-Host ""
 
 npm run dev
