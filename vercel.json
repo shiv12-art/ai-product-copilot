@@ -1,0 +1,38 @@
+{
+  "buildCommand": "echo 'Static deployment'",
+  "outputDirectory": ".",
+  "public": true,
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/product-artifacts-enhanced.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, s-maxage=3600"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "src": "/product-artifacts-enhanced.html",
+      "dest": "/product-artifacts-enhanced.html",
+      "methods": ["GET", "HEAD"],
+      "status": 200
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}
