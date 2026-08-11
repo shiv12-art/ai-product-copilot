@@ -3,6 +3,10 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { generateIntelligentArtifacts } from '@/lib/generation/intelligent-generator'
+import { Button } from '@/components/UI/Button'
+import { Card } from '@/components/UI/Card'
+import { Badge } from '@/components/UI/Badge'
+import { Input } from '@/components/UI/Input'
 
 const categories = [
   { label: 'SaaS', value: 'saas', emoji: '☁️' },
@@ -24,6 +28,34 @@ const categories = [
 const categoryMap: Record<string, string> = Object.fromEntries(
   categories.map(c => [c.label, c.value])
 )
+
+const artifacts = [
+  { icon: '📋', title: 'Product Canvas', description: 'Business model overview with key elements' },
+  { icon: '📄', title: 'PRD', description: 'Comprehensive product requirements document' },
+  { icon: '🎯', title: 'GTM Strategy', description: 'Go-to-market plan with positioning' },
+  { icon: '⭐', title: 'Features', description: 'Detailed feature specifications' },
+  { icon: '✅', title: 'Validation Plan', description: 'Customer discovery strategy' },
+  { icon: '🏆', title: 'Competitive Analysis', description: 'Real competitor insights' },
+  { icon: '🎤', title: 'Pitch Deck', description: 'Investor presentation outline' },
+]
+
+const testimonials = [
+  {
+    name: 'Sarah Chen',
+    role: 'Product Manager at Startup',
+    text: 'This tool saved me 20 hours of research and documentation work. The PRD quality is impressive.',
+  },
+  {
+    name: 'James Wilson',
+    role: 'Founder & CEO',
+    text: 'Finally, a tool that understands product development. Generated artifacts I\'d present to investors.',
+  },
+  {
+    name: 'Maria Rodriguez',
+    role: 'Business Analyst',
+    text: 'The competitive analysis alone is worth using this. Incredibly insightful for different markets.',
+  },
+]
 
 const sampleProblems = [
   {
@@ -72,7 +104,6 @@ export default function Home() {
     try {
       const categoryKey = categoryMap[category]
 
-      // Generate intelligent artifacts based on problem statement
       const generatedContent = generateIntelligentArtifacts({
         problemStatement,
         category: categoryKey as any,
@@ -85,17 +116,18 @@ export default function Home() {
         features: { content: generatedContent.features, editedAt: new Date().toISOString() },
         validation: { content: generatedContent.validation, editedAt: new Date().toISOString() },
         competitive: { content: generatedContent.competitive, editedAt: new Date().toISOString() },
-        pitch: { content: generatedContent.pitch, editedAt: new Date().toISOString() },
+        metrics: { content: generatedContent.metrics, editedAt: new Date().toISOString() },
       }
 
       const generation = {
-        id: Date.now().toString(),
+        id: `gen_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         problemStatement,
         category: categoryKey,
         artifacts,
         isBookmarked: false,
+        projectName: problemStatement.substring(0, 50),
       }
 
       localStorage.setItem('latestGeneration', JSON.stringify(generation))
@@ -109,213 +141,219 @@ export default function Home() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)' }}>
-      {/* Header */}
-      <div style={{ padding: '20px 40px', borderBottom: '1px solid rgba(0,0,0,0.05)', backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)' }}>
-        <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#1e293b' }}>🚀 AI Product Copilot</h1>
-      </div>
-
-      {/* Main Content */}
-      <div style={{ padding: '60px 40px', maxWidth: '900px', margin: '0 auto' }}>
-        {/* Hero Section */}
-        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '42px', fontWeight: '700', color: '#0f172a', marginBottom: '16px', lineHeight: '1.2' }}>
-            Transform Your Product Idea Into Reality
-          </h2>
-          <p style={{ fontSize: '18px', color: '#475569', marginBottom: '8px', lineHeight: '1.6' }}>
-            Generate comprehensive product artifacts in seconds. No sign-ups, no APIs, completely offline.
-          </p>
-          <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '0' }}>
-            Canvas • PRD • GTM Strategy • Features • Validation • Competitive Analysis • Pitch Deck
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+      {/* Hero Section */}
+      <section className="relative px-4 py-20 md:py-32 overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-200 dark:bg-cyan-900/20 rounded-full blur-3xl opacity-20" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-200 dark:bg-purple-900/20 rounded-full blur-3xl opacity-20" />
         </div>
 
-        {/* Form Card */}
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          padding: '40px',
-          boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
-          marginBottom: '60px',
-        }}>
-          <form onSubmit={handleGenerate} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {/* Problem Statement Input */}
-            <div>
-              <label style={{ display: 'block', marginBottom: '12px', fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>
-                📝 Describe Your Product Idea
-              </label>
-              <textarea
+        <div className="max-w-5xl mx-auto text-center">
+          <Badge variant="info" className="mx-auto mb-6">
+            ✨ Generate 7 Professional Artifacts in Seconds
+          </Badge>
+
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+            Build Your Product{' '}
+            <span className="bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
+              In Seconds
+            </span>
+          </h1>
+
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Get professional product artifacts instantly. No sign-ups, no APIs, completely offline. Turn your idea into a complete product strategy.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <Button size="lg" variant="primary" onClick={() => document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' })}>
+              Get Started Free
+            </Button>
+            <Button size="lg" variant="secondary">
+              View Examples
+            </Button>
+          </div>
+
+          {/* Social Proof Badges */}
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+            <span>✓ 100% Free</span>
+            <span>✓ No Sign-up</span>
+            <span>✓ Works Offline</span>
+            <span>✓ Your Data, Your Control</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Form Section */}
+      <section id="form" className="px-4 py-16 md:py-24">
+        <div className="max-w-4xl mx-auto">
+          <Card variant="elevated" className="p-8 md:p-12">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Describe Your Product Idea</h2>
+              <p className="text-gray-600 dark:text-gray-400">We'll generate a complete product strategy in seconds</p>
+            </div>
+
+            <form onSubmit={handleGenerate} className="space-y-8">
+              {/* Problem Statement */}
+              <Input
+                isTextarea={true}
+                label="What problem are you solving?"
+                placeholder="e.g., Developers waste hours writing boilerplate code. We want to build an AI tool that generates production-ready code from natural language..."
                 value={problemStatement}
                 onChange={(e) => setProblemStatement(e.target.value)}
-                placeholder="e.g., I want to build a productivity tool that helps remote teams collaborate better..."
-                style={{
-                  width: '100%',
-                  padding: '16px',
-                  borderRadius: '8px',
-                  border: '2px solid #e2e8f0',
-                  minHeight: '120px',
-                  fontFamily: 'inherit',
-                  fontSize: '14px',
-                  color: '#334155',
-                  transition: 'border-color 0.2s',
-                  boxSizing: 'border-box',
-                }}
-                onFocus={(e) => e.currentTarget.style.borderColor = '#2563eb'}
-                onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
+                rows={5}
               />
-            </div>
 
-            {/* Category Selection */}
-            <div>
-              <label style={{ display: 'block', marginBottom: '12px', fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>
-                🎯 Product Category
-              </label>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                gap: '10px',
-              }}>
-                {categories.map((cat) => (
-                  <button
-                    key={cat.value}
-                    type="button"
-                    onClick={() => setCategory(cat.label)}
-                    style={{
-                      padding: '12px',
-                      borderRadius: '8px',
-                      border: category === cat.label ? '2px solid #2563eb' : '2px solid #e2e8f0',
-                      backgroundColor: category === cat.label ? '#dbeafe' : '#f8fafc',
-                      cursor: 'pointer',
-                      fontSize: '13px',
-                      fontWeight: '500',
-                      color: category === cat.label ? '#1e40af' : '#475569',
-                      transition: 'all 0.2s',
-                    }}
-                  >
-                    <div style={{ fontSize: '20px', marginBottom: '4px' }}>{cat.emoji}</div>
-                    <div>{cat.label}</div>
-                  </button>
-                ))}
+              {/* Category Selection */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                  Choose Your Product Category
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat.value}
+                      type="button"
+                      onClick={() => setCategory(cat.label)}
+                      className={`
+                        p-3 rounded-lg border-2 transition-all duration-200 flex flex-col items-center gap-1
+                        ${
+                          category === cat.label
+                            ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-900/30'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                        }
+                      `}
+                    >
+                      <span className="text-2xl">{cat.emoji}</span>
+                      <span className="text-xs font-medium text-center text-gray-700 dark:text-gray-300">{cat.label}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading || !problemStatement.trim() || !category}
-              style={{
-                padding: '16px',
-                backgroundColor: loading || !problemStatement.trim() || !category ? '#cbd5e1' : '#2563eb',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: loading || !problemStatement.trim() || !category ? 'not-allowed' : 'pointer',
-                fontSize: '16px',
-                fontWeight: '600',
-                transition: 'background-color 0.2s',
-                marginTop: '8px',
-              }}
-              onMouseEnter={(e) => {
-                if (!loading && problemStatement.trim() && category) {
-                  e.currentTarget.style.backgroundColor = '#1d4ed8'
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!loading && problemStatement.trim() && category) {
-                  e.currentTarget.style.backgroundColor = '#2563eb'
-                }
-              }}
-            >
-              {loading ? '⏳ Generating Artifacts...' : '✨ Generate All 7 Artifacts'}
-            </button>
-          </form>
-
-          {/* Sample Problems */}
-          <div style={{ marginTop: '40px', paddingTop: '32px', borderTop: '2px solid #e2e8f0' }}>
-            <p style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '16px' }}>
-              ✨ Try Sample Problems
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
-              {sampleProblems.map((sample, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => {
-                    setProblemStatement(sample.description)
-                    setCategory(sample.category)
-                  }}
-                  style={{
-                    padding: '12px',
-                    backgroundColor: '#f8fafc',
-                    border: '1px solid #cbd5e1',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontSize: '12px',
-                    textAlign: 'left',
-                    transition: 'all 0.2s',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#2563eb'
-                    e.currentTarget.style.backgroundColor = '#dbeafe'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#cbd5e1'
-                    e.currentTarget.style.backgroundColor = '#f8fafc'
-                  }}
+              {/* Submit Buttons */}
+              <div className="flex gap-4">
+                <Button
+                  type="submit"
+                  size="lg"
+                  variant="primary"
+                  isLoading={loading}
+                  fullWidth={false}
+                  disabled={loading || !problemStatement.trim() || !category}
                 >
-                  <div style={{ fontWeight: '600', color: '#1e293b', marginBottom: '4px' }}>{sample.title}</div>
-                  <div style={{ color: '#64748b', fontSize: '11px' }}>{sample.category}</div>
-                </button>
-              ))}
-            </div>
+                  {loading ? 'Generating...' : 'Generate All 7 Artifacts'}
+                </Button>
+              </div>
+
+              {/* Sample Problems */}
+              <div className="pt-8 border-t border-gray-200 dark:border-gray-800">
+                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Try a sample problem:</p>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {sampleProblems.slice(0, 3).map((sample, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        setProblemStatement(sample.description)
+                        setCategory(sample.category)
+                      }}
+                      className="p-4 rounded-lg border border-gray-300 dark:border-gray-700 hover:border-cyan-400 dark:hover:border-cyan-500 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all text-left"
+                    >
+                      <p className="font-medium text-gray-900 dark:text-white text-sm mb-1">{sample.title}</p>
+                      <Badge size="sm" variant="info">{sample.category}</Badge>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </form>
+          </Card>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="px-4 py-16 md:py-24 bg-gray-100/50 dark:bg-gray-900/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">7 Professional Artifacts</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">Everything you need to launch your product</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {artifacts.map((artifact, idx) => (
+              <Card key={idx} variant="default" isHoverable={true}>
+                <div className="text-4xl mb-4">{artifact.icon}</div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{artifact.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{artifact.description}</p>
+              </Card>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* Features Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
-          <div style={{
-            padding: '24px',
-            backgroundColor: 'white',
-            borderRadius: '12px',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
-            border: '1px solid #e2e8f0',
-          }}>
-            <div style={{ fontSize: '28px', marginBottom: '12px' }}>📋</div>
-            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>7 Complete Artifacts</h3>
-            <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>
-              Product Canvas, PRD, GTM Strategy, Feature Spec, Validation Plan, Competitive Analysis & Pitch Deck
-            </p>
+      {/* How It Works */}
+      <section className="px-4 py-16 md:py-24">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">How It Works</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">Three simple steps to complete product strategy</p>
           </div>
 
-          <div style={{
-            padding: '24px',
-            backgroundColor: 'white',
-            borderRadius: '12px',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
-            border: '1px solid #e2e8f0',
-          }}>
-            <div style={{ fontSize: '28px', marginBottom: '12px' }}>⚡</div>
-            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>Instant Generation</h3>
-            <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>
-              All artifacts generated in under 2 seconds. No waiting, no delays, pure speed.
-            </p>
-          </div>
-
-          <div style={{
-            padding: '24px',
-            backgroundColor: 'white',
-            borderRadius: '12px',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
-            border: '1px solid #e2e8f0',
-          }}>
-            <div style={{ fontSize: '28px', marginBottom: '12px' }}>🔒</div>
-            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>100% Private</h3>
-            <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>
-              Works completely offline in your browser. Your data never leaves your device.
-            </p>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { step: '1', title: 'Describe Your Idea', description: 'Tell us your product concept and target category' },
+              { step: '2', title: 'AI Generates', description: 'Our system creates 7 comprehensive artifacts instantly' },
+              { step: '3', title: 'Use & Iterate', description: 'Edit, download, and share your product strategy' },
+            ].map((item, idx) => (
+              <div key={idx} className="relative">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-cyan-500 text-white flex items-center justify-center font-bold text-lg">
+                    {item.step}
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+                </div>
+                <p className="text-gray-600 dark:text-gray-400 ml-16">{item.description}</p>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="px-4 py-16 md:py-24 bg-gray-100/50 dark:bg-gray-900/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Loved by Product Builders</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">See what users think about the AI Product Copilot</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, idx) => (
+              <Card key={idx} variant="default">
+                <div className="mb-4">
+                  <div className="text-cyan-400 text-lg">★★★★★</div>
+                </div>
+                <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">"{testimonial.text}"</p>
+                <div className="border-t border-gray-200 dark:border-gray-800 pt-4">
+                  <p className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{testimonial.role}</p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="px-4 py-16 md:py-24">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">Ready to Build?</h2>
+          <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">Start generating your product strategy right now. It only takes 2 seconds.</p>
+          <Button size="lg" variant="primary" onClick={() => document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' })}>
+            Create Your Strategy
+          </Button>
+        </div>
+      </section>
     </div>
   )
 }
