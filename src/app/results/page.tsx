@@ -8,6 +8,7 @@ import { Button } from '@/components/UI/Button'
 import { Card } from '@/components/UI/Card'
 import { Badge } from '@/components/UI/Badge'
 import { ShareDialog } from '@/components/Share/ShareDialog'
+import { ExportMenu } from '@/components/Export/ExportMenu'
 
 const ARTIFACT_CONFIG: Record<string, { title: string; emoji: string; description: string }> = {
   canvas: { title: 'Product Canvas', emoji: '📋', description: 'Business model overview' },
@@ -48,6 +49,7 @@ export default function ResultsPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [shareDialogOpen, setShareDialogOpen] = useState(false)
   const [shareUrl, setShareUrl] = useState('')
+  const [exportMenuOpen, setExportMenuOpen] = useState(false)
 
   useEffect(() => {
     const id = searchParams.get('id')
@@ -224,6 +226,14 @@ export default function ResultsPage() {
                 >
                   🔗 Share
                 </Button>
+                <Button
+                  variant="secondary"
+                  fullWidth
+                  size="sm"
+                  onClick={() => setExportMenuOpen(true)}
+                >
+                  📥 Export
+                </Button>
                 <Button variant="secondary" fullWidth size="sm" onClick={handleDuplicate}>
                   📋 Duplicate
                 </Button>
@@ -286,6 +296,13 @@ export default function ResultsPage() {
         onClose={() => setShareDialogOpen(false)}
         shareUrl={shareUrl}
         projectName={generation.projectName || 'Product Strategy'}
+      />
+
+      {/* Export Menu */}
+      <ExportMenu
+        isOpen={exportMenuOpen}
+        onClose={() => setExportMenuOpen(false)}
+        generation={generation}
       />
     </div>
   )
