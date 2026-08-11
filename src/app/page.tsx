@@ -319,6 +319,27 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Stats Section */}
+      <section className="px-4 py-16 md:py-24">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { icon: '⚡', stat: '2,500+', label: 'Products Planned' },
+              { icon: '⏱️', stat: '80 Hours', label: 'Time Saved' },
+              { icon: '🌍', stat: '45', label: 'Countries' },
+            ].map((item, idx) => (
+              <Card key={idx} variant="elevated" className="text-center p-8">
+                <div className="text-5xl mb-4">{item.icon}</div>
+                <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  {item.stat}
+                </div>
+                <p className="text-gray-600 dark:text-gray-400">{item.label}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials */}
       <section className="px-4 py-16 md:py-24 bg-gray-100/50 dark:bg-gray-900/50">
         <div className="max-w-6xl mx-auto">
@@ -337,6 +358,38 @@ export default function Home() {
                 <div className="border-t border-gray-200 dark:border-gray-800 pt-4">
                   <p className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">{testimonial.role}</p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Recently Shared Section */}
+      <section className="px-4 py-16 md:py-24">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Recently Shared</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">See what others are building</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { icon: '☁️', title: 'SaaS Platform', desc: 'Team collaboration tool', views: '142 views' },
+              { icon: '📱', title: 'Fitness Mobile App', desc: 'Personal training marketplace', views: '89 views' },
+              { icon: '🤖', title: 'AI Code Assistant', desc: 'Developer productivity tool', views: '256 views' },
+            ].map((item, idx) => (
+              <Card key={idx} variant="elevated" isHoverable>
+                <div className="text-4xl mb-4">{item.icon}</div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                  {item.desc}
+                </p>
+                <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-800">
+                  <span className="text-xs text-gray-500 dark:text-gray-500">👁️ {item.views}</span>
+                  <Button variant="ghost" size="sm">View →</Button>
                 </div>
               </Card>
             ))}

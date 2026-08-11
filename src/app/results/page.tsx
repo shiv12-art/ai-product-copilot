@@ -7,6 +7,7 @@ import { Generation } from '@/types/generation'
 import { Button } from '@/components/UI/Button'
 import { Card } from '@/components/UI/Card'
 import { Badge } from '@/components/UI/Badge'
+import { ShareDialog } from '@/components/Share/ShareDialog'
 
 const ARTIFACT_CONFIG: Record<string, { title: string; emoji: string; description: string }> = {
   canvas: { title: 'Product Canvas', emoji: '📋', description: 'Business model overview' },
@@ -45,6 +46,8 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [shareDialogOpen, setShareDialogOpen] = useState(false)
+  const [shareUrl, setShareUrl] = useState('')
 
   useEffect(() => {
     const id = searchParams.get('id')
@@ -214,8 +217,9 @@ export default function ResultsPage() {
                   size="sm"
                   onClick={() => {
                     const token = useGenerationStore.getState().generateShareToken(generation.id)
-                    navigator.clipboard.writeText(`${window.location.origin}/share/${token}`)
-                    alert('Share link copied!')
+                    const url = `${window.location.origin}/share/${token}`
+                    setShareUrl(url)
+                    setShareDialogOpen(true)
                   }}
                 >
                   🔗 Share
@@ -275,6 +279,14 @@ export default function ResultsPage() {
           </div>
         </div>
       </div>
+
+      {/* Share Dialog */}
+      <ShareDialog
+        isOpen={shareDialogOpen}
+        onClose={() => setShareDialogOpen(false)}
+        shareUrl={shareUrl}
+        projectName={generation.projectName || 'Product Strategy'}
+      />
     </div>
   )
 }
