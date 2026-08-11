@@ -1,284 +1,280 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useGenerationStore } from '@/lib/storage/generationStore'
+import { Generation } from '@/types/generation'
+import { Button } from '@/components/UI/Button'
+import { Card } from '@/components/UI/Card'
+import { Badge } from '@/components/UI/Badge'
 
-interface Artifact {
-  content: string
-  editedAt?: string
+const ARTIFACT_CONFIG: Record<string, { title: string; emoji: string; description: string }> = {
+  canvas: { title: 'Product Canvas', emoji: '📋', description: 'Business model overview' },
+  prd: { title: 'PRD', emoji: '📄', description: 'Product requirements' },
+  gtm: { title: 'GTM Strategy', emoji: '🎯', description: 'Go-to-market plan' },
+  features: { title: 'Features', emoji: '⭐', description: 'Feature specifications' },
+  validation: { title: 'Validation', emoji: '✅', description: 'Validation plan' },
+  competitive: { title: 'Competitors', emoji: '🏆', description: 'Competitive analysis' },
+  metrics: { title: 'Metrics', emoji: '📊', description: 'Success metrics' },
 }
 
-interface Generation {
-  id: string
-  problemStatement: string
-  category: string
-  artifacts: Record<string, Artifact>
-  isBookmarked: boolean
-}
-
-const artifactTitles: Record<string, { title: string; emoji: string }> = {
-  canvas: { title: 'Product Canvas', emoji: '🎨' },
-  prd: { title: 'Product Requirements', emoji: '📋' },
-  gtm: { title: 'GTM Strategy', emoji: '🎯' },
-  features: { title: 'Features', emoji: '⚙️' },
-  validation: { title: 'Validation Plan', emoji: '✅' },
-  competitive: { title: 'Competitive Analysis', emoji: '🏆' },
-  pitch: { title: 'Pitch Deck', emoji: '🚀' },
+const CATEGORY_LABELS: Record<string, string> = {
+  saas: 'SaaS',
+  mobile_app: 'Mobile App',
+  web_app: 'Web App',
+  marketplace: 'Marketplace',
+  b2c_app: 'B2C App',
+  hardware: 'Hardware',
+  ai_tool: 'AI Tool',
+  fintech: 'Fintech',
+  healthcare: 'Healthcare',
+  edtech: 'EdTech',
+  gaming: 'Gaming',
+  social: 'Social Network',
+  service: 'Service',
+  community: 'Community',
 }
 
 export default function ResultsPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const { getGeneration, updateArtifact, toggleBookmark, setCurrentGeneration, duplicateGeneration, deleteGeneration } = useGenerationStore()
+
   const [generation, setGeneration] = useState<Generation | null>(null)
   const [selectedTab, setSelectedTab] = useState<string>('canvas')
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
   useEffect(() => {
-    const data = localStorage.getItem('latestGeneration')
-    if (data) {
-      setGeneration(JSON.parse(data))
+    const id = searchParams.get('id')
+    let data: Generation | undefined
+
+    if (id) {
+      data = getGeneration(id)
     } else {
-      router.push('/')
+      const latestData = localStorage.getItem('latestGeneration')
+      if (latestData) {
+        data = JSON.parse(latestData)
+      }
+    }
+
+    if (data) {
+      setGeneration(data)
+      setCurrentGeneration(data)
+    } else {
+      router.push('/projects')
     }
     setLoading(false)
-  }, [router])
+  }, [router, searchParams, getGeneration, setCurrentGeneration])
 
   if (loading) {
-    return <div style={{ padding: '40px', textAlign: 'center' }}>Loading...</div>
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-cyan-200 border-t-cyan-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading artifacts...</p>
+        </div>
+      </div>
+    )
   }
 
   if (!generation) {
-    return <div style={{ padding: '40px', textAlign: 'center' }}>No artifacts found</div>
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900 flex items-center justify-center">
+        <Card>
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Project Not Found</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">The project you're looking for doesn't exist.</p>
+            <Button onClick={() => router.push('/projects')}>Back to Projects</Button>
+          </div>
+        </Card>
+      </div>
+    )
   }
 
   const currentArtifact = generation.artifacts[selectedTab as keyof typeof generation.artifacts]
-  const currentTitle = artifactTitles[selectedTab]
+  const artifactConfig = ARTIFACT_CONFIG[selectedTab]
+
   const handleCopy = () => {
-    const content = currentArtifact?.content
-    if (content) {
-      navigator.clipboard.writeText(content)
+    if (currentArtifact?.content) {
+      navigator.clipboard.writeText(currentArtifact.content)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     }
   }
 
+  const handleDuplicate = () => {
+    duplicateGeneration(generation.id)
+    alert('Project duplicated! Check your projects list.')
+  }
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this project? This cannot be undone.')) {
+      deleteGeneration(generation.id)
+      router.push('/projects')
+    }
+  }
+
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
-      {/* Premium Header */}
-      <header style={{
-        backgroundColor: 'white',
-        borderBottom: '1px solid #e2e8f0',
-        padding: '16px 0',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-      }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h1 style={{ margin: '0 0 4px 0', fontSize: '22px', fontWeight: '700', color: '#0f172a' }}>🚀 AI Product Copilot</h1>
-            <p style={{ margin: 0, fontSize: '12px', color: '#64748b' }}>Generated Artifacts</p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 flex flex-col">
+      {/* Header */}
+      <header className="sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.push('/projects')}
+              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+              title="Back to projects"
+            >
+              ← Back
+            </button>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{generation.projectName || 'Untitled Project'}</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Created {new Date(generation.createdAt).toLocaleDateString()}</p>
+            </div>
           </div>
-          <button
-            onClick={() => router.push('/')}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#f0f4f8',
-              color: '#1e293b',
-              border: '1px solid #cbd5e1',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '600',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#e0e7f0'
-              e.currentTarget.style.borderColor = '#94a3b8'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#f0f4f8'
-              e.currentTarget.style.borderColor = '#cbd5e1'
-            }}
-          >
-            + Create New
-          </button>
+          <div className="flex items-center gap-2">
+            <Badge variant="primary">{CATEGORY_LABELS[generation.category as keyof typeof CATEGORY_LABELS]}</Badge>
+          </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main style={{ flex: 1, padding: '40px 24px', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
-        {/* Problem Statement Card */}
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          padding: '24px',
-          marginBottom: '32px',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-            <span style={{ fontSize: '24px' }}>💡</span>
-            <div style={{ flex: 1 }}>
-              <p style={{ margin: '0 0 8px 0', fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Problem Statement</p>
-              <p style={{ margin: 0, fontSize: '15px', color: '#1e293b', lineHeight: '1.6', fontWeight: '500' }}>{generation.problemStatement}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Artifact Tabs - Enhanced */}
-        <div style={{ marginBottom: '32px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-            <span style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b' }}>📚 Artifacts</span>
-            <span style={{ fontSize: '12px', color: '#64748b' }}>({Object.keys(artifactTitles).length} documents)</span>
-          </div>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-            gap: '12px',
-          }}>
-            {Object.entries(artifactTitles).map(([key, { title, emoji }]) => (
-              <button
-                key={key}
-                onClick={() => setSelectedTab(key)}
-                style={{
-                  padding: '14px 12px',
-                  backgroundColor: selectedTab === key ? '#2563eb' : 'white',
-                  color: selectedTab === key ? 'white' : '#1e293b',
-                  border: selectedTab === key ? '2px solid #2563eb' : '2px solid #e2e8f0',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontWeight: selectedTab === key ? '700' : '600',
-                  transition: 'all 0.2s ease',
-                  textAlign: 'center',
-                  boxShadow: selectedTab === key ? '0 4px 12px rgba(37, 99, 235, 0.3)' : 'none',
-                }}
-                onMouseEnter={(e) => {
-                  if (selectedTab !== key) {
-                    e.currentTarget.style.borderColor = '#94a3b8'
-                    e.currentTarget.style.backgroundColor = '#f0f4f8'
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (selectedTab !== key) {
-                    e.currentTarget.style.borderColor = '#e2e8f0'
-                    e.currentTarget.style.backgroundColor = 'white'
-                  }
-                }}
-              >
-                <div style={{ fontSize: '18px', marginBottom: '4px' }}>{emoji}</div>
-                <div style={{ lineHeight: '1.3' }}>{title}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Content Display - Premium */}
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
-          overflow: 'hidden',
-          marginBottom: '32px',
-        }}>
-          {/* Content Header */}
-          <div style={{
-            padding: '24px',
-            borderBottom: '1px solid #e2e8f0',
-            backgroundColor: '#f8fafc',
-            display: 'flex', alignItems: 'center', gap: '12px'
-          }}>
-            <span style={{ fontSize: '28px' }}>{currentTitle?.emoji}</span>
-            <div>
-              <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '700', color: '#0f172a' }}>{currentTitle?.title}</h2>
-              <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#64748b' }}>Professional document template</p>
+      <div className="flex-1 max-w-7xl mx-auto w-full px-4 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* Main Content Area */}
+        <div className="lg:col-span-3">
+          {/* Artifact Tabs */}
+          <div className="mb-8">
+            <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 uppercase tracking-wide">Select Artifact</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              {Object.entries(ARTIFACT_CONFIG).map(([key, { title, emoji, description }]) => (
+                <button
+                  key={key}
+                  onClick={() => setSelectedTab(key)}
+                  className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                    selectedTab === key
+                      ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-900/30'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                  }`}
+                >
+                  <div className="text-2xl mb-2">{emoji}</div>
+                  <p className={`font-semibold text-sm ${selectedTab === key ? 'text-cyan-900 dark:text-cyan-100' : 'text-gray-900 dark:text-gray-100'}`}>
+                    {title}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{description}</p>
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Content Body */}
-          <div style={{ padding: '32px' }}>
-            <div style={{
-              whiteSpace: 'pre-wrap',
-              lineHeight: '1.7',
-              fontFamily: '"Menlo", "Courier New", monospace',
-              fontSize: '13px',
-              color: '#334155',
-              backgroundColor: '#f8fafc',
-              padding: '20px',
-              borderRadius: '8px',
-              border: '1px solid #e2e8f0',
-              overflowX: 'auto',
-              maxHeight: '600px',
-              overflowY: 'auto',
-            }}>
-              {currentArtifact?.content}
-            </div>
-          </div>
+          {/* Artifact Content */}
+          {artifactConfig && currentArtifact && (
+            <Card variant="elevated" className="min-h-96">
+              <div className="mb-6 pb-6 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    {artifactConfig.emoji} {artifactConfig.title}
+                  </h3>
+                  {currentArtifact.editedAt && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Last edited {new Date(currentArtifact.editedAt).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+                <Button
+                  size="sm"
+                  variant={copied ? 'success' : 'secondary'}
+                  onClick={handleCopy}
+                >
+                  {copied ? '✓ Copied' : '📋 Copy'}
+                </Button>
+              </div>
+
+              {/* Artifact Content */}
+              <div className="prose dark:prose-invert max-w-none">
+                <div className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono text-sm leading-relaxed">
+                  {currentArtifact.content}
+                </div>
+              </div>
+            </Card>
+          )}
         </div>
 
-        {/* Action Buttons - Enhanced */}
-        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button
-            onClick={handleCopy}
-            style={{
-              padding: '12px 28px',
-              backgroundColor: copied ? '#10b981' : '#2563eb',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '700',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
-              letterSpacing: '0.3px',
-            }}
-            onMouseEnter={(e) => {
-              if (!copied) {
-                e.currentTarget.style.transform = 'translateY(-2px)'
-                e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 99, 235, 0.4)'
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!copied) {
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)'
-              }
-            }}
-          >
-            {copied ? '✅ Copied!' : '📋 Copy Artifact'}
-          </button>
-          <button
-            onClick={() => router.push('/')}
-            style={{
-              padding: '12px 28px',
-              backgroundColor: 'white',
-              color: '#1e293b',
-              border: '2px solid #cbd5e1',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '700',
-              transition: 'all 0.2s ease',
-              letterSpacing: '0.3px',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#2563eb'
-              e.currentTarget.style.color = '#2563eb'
-              e.currentTarget.style.backgroundColor = '#dbeafe'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = '#cbd5e1'
-              e.currentTarget.style.color = '#1e293b'
-              e.currentTarget.style.backgroundColor = 'white'
-            }}
-          >
-            🔄 New Generation
-          </button>
+        {/* Sidebar */}
+        <div className="lg:col-span-1">
+          <div className="sticky top-24 space-y-6">
+            {/* Quick Actions Card */}
+            <Card variant="elevated">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+              <div className="space-y-3">
+                <Button
+                  variant="primary"
+                  fullWidth
+                  size="sm"
+                  onClick={() => {
+                    const token = useGenerationStore.getState().generateShareToken(generation.id)
+                    navigator.clipboard.writeText(`${window.location.origin}/share/${token}`)
+                    alert('Share link copied!')
+                  }}
+                >
+                  🔗 Share
+                </Button>
+                <Button variant="secondary" fullWidth size="sm" onClick={handleDuplicate}>
+                  📋 Duplicate
+                </Button>
+                <Button
+                  variant="ghost"
+                  fullWidth
+                  size="sm"
+                  onClick={() => toggleBookmark(generation.id)}
+                >
+                  {generation.isBookmarked ? '⭐ Saved' : '☆ Save'}
+                </Button>
+              </div>
+            </Card>
+
+            {/* Project Info Card */}
+            <Card variant="elevated">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Project Info</h3>
+              <div className="space-y-3 text-sm">
+                <div>
+                  <p className="text-gray-600 dark:text-gray-400">Category</p>
+                  <p className="font-medium text-gray-900 dark:text-white">
+                    {CATEGORY_LABELS[generation.category as keyof typeof CATEGORY_LABELS]}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-600 dark:text-gray-400">Created</p>
+                  <p className="font-medium text-gray-900 dark:text-white">
+                    {new Date(generation.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+                {generation.viewCount ? (
+                  <div>
+                    <p className="text-gray-600 dark:text-gray-400">Views</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{generation.viewCount}</p>
+                  </div>
+                ) : null}
+                {generation.feedback?.rating ? (
+                  <div>
+                    <p className="text-gray-600 dark:text-gray-400">Rating</p>
+                    <p className="font-medium text-cyan-500">★ {generation.feedback.rating}/5</p>
+                  </div>
+                ) : null}
+              </div>
+            </Card>
+
+            {/* Danger Zone */}
+            <Card variant="elevated" className="border-red-200 dark:border-red-800/50">
+              <h3 className="font-semibold text-red-600 dark:text-red-400 mb-4">Danger Zone</h3>
+              <Button variant="danger" fullWidth size="sm" onClick={handleDelete}>
+                🗑️ Delete Project
+              </Button>
+            </Card>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   )
 }
