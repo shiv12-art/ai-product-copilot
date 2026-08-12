@@ -1,8 +1,8 @@
 {
-  "buildCommand": "echo 'Static deployment'",
-  "outputDirectory": ".",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
   "public": true,
-  "cleanUrls": false,
+  "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
     {
@@ -19,16 +19,26 @@
         {
           "key": "X-Frame-Options",
           "value": "DENY"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/html; charset=utf-8"
         }
       ]
     }
   ],
   "routes": [
     {
+      "src": "/public/(.*)",
+      "dest": "/public/$1"
+    },
+    {
       "src": "/product-artifacts-enhanced.html",
-      "dest": "/product-artifacts-enhanced.html",
-      "methods": ["GET", "HEAD"],
-      "status": 200
+      "dest": "/public/product-artifacts-enhanced.html"
+    },
+    {
+      "src": "/artifacts",
+      "dest": "/artifacts"
     },
     {
       "src": "/(.*)",
