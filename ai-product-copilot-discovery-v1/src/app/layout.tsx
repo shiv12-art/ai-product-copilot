@@ -1,17 +1,14 @@
-'use client'
-
 import './globals.css'
 import { ReactNode } from 'react'
 
+export const metadata = {
+  title: 'AI Product Copilot - Discovery Intelligence Engine v1',
+  description: 'Product discovery & strategy analysis with intelligent insights',
+}
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>AI Product Copilot - Discovery Intelligence Engine v1</title>
-        <meta name="description" content="Product discovery & strategy analysis with intelligent insights" />
-      </head>
+    <html lang="en">
       <body className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 transition-colors">
         <div className="min-h-screen flex flex-col">
           <header className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-50">
