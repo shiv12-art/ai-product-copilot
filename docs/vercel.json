@@ -1,0 +1,13 @@
+{
+  "buildCommand": "echo 'Serving static enhanced HTML'",
+  "outputDirectory": ".",
+  "public": true,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "routes": [
+    {
+      "src": "/.*",
+      "dest": "/index.html"
+    }
+  ]
+}
