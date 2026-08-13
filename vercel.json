@@ -1,7 +1,13 @@
 {
-  "buildCommand": "cd ai-product-copilot && npm run build",
-  "outputDirectory": "ai-product-copilot/.next",
+  "buildCommand": "echo 'Serving static files'",
+  "outputDirectory": ".",
   "public": true,
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "routes": [
+    {
+      "src": "/.*",
+      "dest": "/index.html"
+    }
+  ]
 }
