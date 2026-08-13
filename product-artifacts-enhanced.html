@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Product Artifacts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --bg: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --bg-secondary: #1a1f35;
+            --bg-tertiary: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --border: #334155;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        /* Theme Toggle - Static at end */
+        .theme-toggle {
+            padding: 0.5rem 1rem;
+            background: none;
+            color: var(--text-secondary);
+            border: none;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .theme-toggle:hover {
+            color: var(--primary);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease;
+            z-index: 10000;
+            font-weight: 500;
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--error); }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Pages */
+        .page { display: none; animation: fadeIn 0.5s; }
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 5rem 2rem;
+            border-radius: 1.25rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: var(--bg-secondary);
+            padding: 2.5rem;
+            border-radius: 1.25rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--border);
+        }
+
+        .form-section h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--text);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 1.25rem;
+            border: 2px solid var(--border);
+            border-radius: 0.75rem;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 120px;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s;
+            line-height: 1.6;
+        }
+
+        .form-group textarea:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+        }
+
+        /* Categories */
+        .category-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .category-btn {
+            padding: 1.25rem;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .category-btn:hover {
+            border-color: var(--primary);
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .category-icon { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; }
+        .category-name { font-size: 0.9rem; }
+
+        /* Generate Button */
+        .generate-btn {
+            width: 100%;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 3rem;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(8, 145, 178, 0.3);
+        }
+
+        .generate-btn.loading { opacity: 0.7; cursor: not-allowed; }
+
+        /* Clear Button */
+        .clear-btn {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .clear-btn:hover {
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #dc2626;
+        }
+
+        /* Samples */
+        .samples-section {
+            background: var(--bg-secondary);
+            padding: 2.5rem;
+            border-radius: 1.25rem;
+            border: 2px solid var(--border);
+        }
+
+        .samples-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .samples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .sample-card {
+            background: var(--bg);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sample-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .sample-title { font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
+        .sample-desc { font-size: 0.95rem; color: var(--text-secondary); }
+
+        /* Results Header */
+        .results-header {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 1.25rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--border);
+        }
+
+        .results-header h2 { margin-bottom: 1rem; }
+        .results-meta { color: var(--text-secondary); margin-bottom: 0.5rem; }
+
+        /* Nav Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-btn:hover { border-color: var(--primary); }
+        .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 2px solid var(--border);
+            margin-top: 4rem;
+            color: var(--text-secondary);
+        }
+
+        footer button {
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        footer button:hover {
+            color: var(--primary);
+        }
+
+        /* Artifact Tabs */
+        .artifact-tabs {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .artifact-tab {
+            padding: 0.75rem 1.25rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .artifact-tab:hover {
+            border-color: var(--primary);
+            background: var(--bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
+        }
+        .artifact-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.25);
+        }
+
+        /* Content */
+        .artifact-content {
+            background: var(--bg-secondary);
+            padding: 2.5rem;
+            border-radius: 1.25rem;
+            border: 2px solid var(--border);
+            display: none;
+        }
+
+        .artifact-content.active { display: block; }
+        .artifact-content h3 { margin-bottom: 1.5rem; color: var(--primary); font-size: 1.5rem; }
+        .artifact-content p { margin-bottom: 1.25rem; line-height: 1.8; }
+
+        /* Canvas Diagram */
+        .canvas-diagram {
+            background: var(--bg);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            border: 2px solid var(--border);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .canvas-box {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .canvas-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .canvas-title { font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; font-size: 0.9rem; text-transform: uppercase; }
+
+        /* Export Section */
+        .export-section {
+            background: linear-gradient(135deg, var(--bg) 0%, var(--bg-secondary) 100%);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 2px solid var(--primary);
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.1);
+        }
+
+        .export-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .export-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(8, 145, 178, 0.25);
+        }
+
+        /* Personas */
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .persona-card {
+            background: var(--bg);
+            border-left: 5px solid var(--primary);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .persona-card.secondary { border-left-color: #9333ea; }
+        .persona-card.tertiary { border-left-color: #6b7280; }
+
+        .persona-name { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.25rem; }
+        .persona-role { color: var(--text-secondary); margin-bottom: 1rem; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .container { padding: 1rem; }
+            .persona-grid { grid-template-columns: 1fr; }
+            .category-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast -->
+    <div id="toastContainer"></div>
+
+    <!-- Homepage -->
+    <div id="homepage" class="page active">
+        <div class="container">
+            <div class="hero">
+                <h1>✨ AI Product Artifacts</h1>
+                <p>Generate professional product documentation, strategy, and analysis in seconds</p>
+            </div>
+
+            <div class="form-section">
+                <h2>📝 Describe Your Product Idea</h2>
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <label>What product are you building?</label>
+                        <button class="clear-btn" onclick="clearProblemStatement()" style="font-size: 0.85rem; padding: 0.35rem 0.75rem;">🗑️ Clear</button>
+                    </div>
+                    <textarea id="problemStatement" placeholder="Describe your product idea, problem it solves, and target users..." oninput="updateCharCount()"></textarea>
+                    <div style="text-align: right; margin-top: 0.25rem; font-size: 0.8rem; color: var(--text-secondary);">
+                        <span id="charCount">0</span>/500 characters
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="category-section">
+                    <h3>🏷️ Select Category</h3>
+                    <div class="category-grid">
+                        <button class="category-btn active" data-category="saas" onclick="selectCategory(this, 'saas')">
+                            <span class="category-icon">☁️</span>
+                            <span class="category-name">SaaS</span>
+                        </button>
+                        <button class="category-btn" data-category="b2c" onclick="selectCategory(this, 'b2c')">
+                            <span class="category-icon">📱</span>
+                            <span class="category-name">B2C App</span>
+                        </button>
+                        <button class="category-btn" data-category="marketplace" onclick="selectCategory(this, 'marketplace')">
+                            <span class="category-icon">🛍️</span>
+                            <span class="category-name">Marketplace</span>
+                        </button>
+                        <button class="category-btn" data-category="hardware" onclick="selectCategory(this, 'hardware')">
+                            <span class="category-icon">⚙️</span>
+                            <span class="category-name">Hardware</span>
+                        </button>
+                        <button class="category-btn" data-category="ai" onclick="selectCategory(this, 'ai')">
+                            <span class="category-icon">🤖</span>
+                            <span class="category-name">AI Tool</span>
+                        </button>
+                        <button class="category-btn" data-category="fintech" onclick="selectCategory(this, 'fintech')">
+                            <span class="category-icon">💰</span>
+                            <span class="category-name">FinTech</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="generate-btn" onclick="generateArtifacts()">✨ Generate Artifacts</button>
+            </div>
+
+            <div class="samples-section">
+                <h3>💡 Try Sample Problems</h3>
+                <div class="samples-grid">
+                    <div class="sample-card" onclick="useSample('Slack alternative for enterprise customers with better security, compliance, and data residency options for regulated industries')">
+                        <div class="sample-title">Enterprise Chat</div>
+                        <div class="sample-desc">Secure messaging platform for large organizations</div>
+                    </div>
+                    <div class="sample-card" onclick="useSample('AI-powered fitness app that personalizes workout routines based on user goals, fitness level, and available equipment')">
+                        <div class="sample-title">Fitness Coach</div>
+                        <div class="sample-desc">Personalized workouts with AI recommendations</div>
+                    </div>
+                    <div class="sample-card" onclick="useSample('Marketplace connecting freelance designers with startups needing branding, UI/UX, and marketing design work')">
+                        <div class="sample-title">Design Marketplace</div>
+                        <div class="sample-desc">Connect creators with businesses needing design</div>
+                    </div>
+                    <div class="sample-card" onclick="useSample('Blockchain-based supply chain tracking for pharmaceutical companies to ensure authenticity and prevent counterfeit drugs')">
+                        <div class="sample-title">PharmaTrust</div>
+                        <div class="sample-desc">Supply chain transparency for pharma</div>
+                    </div>
+                    <div class="sample-card" onclick="useSample('Personal finance app for Gen Z with gamified savings goals, peer investment clubs, and automated micro-investing')">
+                        <div class="sample-title">FutureWealth</div>
+                        <div class="sample-desc">Gamified investing for young adults</div>
+                    </div>
+                    <div class="sample-card" onclick="useSample('Remote team collaboration tool specifically for distributed engineering teams with real-time code review and pair programming')">
+                        <div class="sample-title">DevSync</div>
+                        <div class="sample-desc">Engineering team collaboration platform</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsPage" class="page">
+        <div class="container">
+            <div class="nav-tabs">
+                <button class="nav-btn" onclick="switchPage('homepage')">🏠 Home</button>
+                <button class="nav-btn active" onclick="switchPage('resultsPage')">📄 Results</button>
+            </div>
+
+            <div class="results-header">
+                <h2>✨ Your Artifacts</h2>
+                <div class="results-meta"><strong>Category:</strong> <span id="categoryDisplay">SaaS</span></div>
+                <div class="results-meta"><strong>Problem:</strong> <span id="problemDisplay"></span></div>
+            </div>
+
+            <div class="artifact-tabs">
+                <button class="artifact-tab active" onclick="switchArtifact('canvas')">📐 Canvas</button>
+                <button class="artifact-tab" onclick="switchArtifact('persona')">👥 Persona</button>
+                <button class="artifact-tab" onclick="switchArtifact('requirements')">📋 Requirements</button>
+                <button class="artifact-tab" onclick="switchArtifact('gtm')">🚀 GTM</button>
+                <button class="artifact-tab" onclick="switchArtifact('features')">✨ Features</button>
+                <button class="artifact-tab" onclick="switchArtifact('validation')">🧪 Validation</button>
+                <button class="artifact-tab" onclick="switchArtifact('metrics')">📊 Metrics</button>
+            </div>
+
+            <!-- Canvas -->
+            <div id="canvas" class="artifact-content active">
+                <h3>Business Model Canvas</h3>
+                <p>Your business model visualization based on: <strong id="canvasProblems"></strong></p>
+
+                <div class="canvas-diagram">
+                    <div class="canvas-grid">
+                        <div>
+                            <div class="canvas-title">Key Partners</div>
+                            <div class="canvas-box" id="partners">Integration partners<br>API providers<br>Resellers</div>
+                        </div>
+                        <div>
+                            <div class="canvas-title">Key Activities</div>
+                            <div class="canvas-box" id="activities">Product development<br>Customer support<br>Marketing</div>
+                        </div>
+                        <div>
+                            <div class="canvas-title">Value Proposition</div>
+                            <div class="canvas-box" id="value">Solve key problem<br>Save time/money<br>Better experience</div>
+                        </div>
+                    </div>
+
+                    <div class="canvas-grid">
+                        <div>
+                            <div class="canvas-title">Key Resources</div>
+                            <div class="canvas-box" id="resources">Team expertise<br>Technology<br>Capital</div>
+                        </div>
+                        <div style="grid-column: 2;">
+                            <div class="canvas-title">Customer Relationships</div>
+                            <div class="canvas-box" id="relationships">Onboarding<br>Support<br>Community</div>
+                        </div>
+                        <div>
+                            <div class="canvas-title">Channels</div>
+                            <div class="canvas-box" id="channels">Direct sales<br>Product launch<br>Partnerships</div>
+                        </div>
+                    </div>
+
+                    <div class="canvas-grid">
+                        <div style="grid-column: 1 / 2;">
+                            <div class="canvas-title">Cost Structure</div>
+                            <div class="canvas-box" id="costs">Development<br>Operations<br>Marketing</div>
+                        </div>
+                        <div style="grid-column: 2 / 4;">
+                            <div class="canvas-title">Revenue Streams</div>
+                            <div class="canvas-box" id="revenue">Subscription model<br>Pay-per-use<br>Premium features</div>
+                        </div>
+                    </div>
+
+                    <div class="canvas-grid">
+                        <div style="grid-column: 1 / 4;">
+                            <div class="canvas-title">Customer Segments</div>
+                            <div class="canvas-box" id="segments">Target audience<br>User types<br>Market segments</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="export-section">
+                    <button class="export-btn" onclick="copyToClipboard('canvas')">📋 Copy</button>
+                    <button class="export-btn" onclick="downloadAsWord('canvas')">📄 Word</button>
+                </div>
+            </div>
+
+            <!-- Other Artifacts -->
+            <div id="persona" class="artifact-content">
+                <h3>Target Personas</h3>
+                <div id="personaContent">Generating personas...</div>
+                <div class="export-section">
+                    <button class="export-btn" onclick="copyToClipboard('persona')">📋 Copy</button>
+                    <button class="export-btn" onclick="downloadAsWord('persona')">📄 Word</button>
+                </div>
+            </div>
+
+            <div id="requirements" class="artifact-content">
+                <h3>Product Requirements</h3>
+                <div id="requirementsContent">Generating requirements...</div>
+                <div class="export-section">
+                    <button class="export-btn" onclick="copyToClipboard('requirements')">📋 Copy</button>
+                    <button class="export-btn" onclick="downloadAsWord('requirements')">📄 Word</button>
+                </div>
+            </div>
+
+            <div id="gtm" class="artifact-content">
+                <h3>Go-to-Market Strategy</h3>
+                <div id="gtmContent">Generating GTM strategy...</div>
+                <div class="export-section">
+                    <button class="export-btn" onclick="copyToClipboard('gtm')">📋 Copy</button>
+                    <button class="export-btn" onclick="downloadAsWord('gtm')">📄 Word</button>
+                </div>
+            </div>
+
+            <div id="features" class="artifact-content">
+                <h3>Product Roadmap</h3>
+                <div id="featuresContent">Generating features...</div>
+                <div class="export-section">
+                    <button class="export-btn" onclick="copyToClipboard('features')">📋 Copy</button>
+                    <button class="export-btn" onclick="downloadAsWord('features')">📄 Word</button>
+                </div>
+            </div>
+
+            <div id="validation" class="artifact-content">
+                <h3>Validation Plan</h3>
+                <div id="validationContent">Generating validation plan...</div>
+                <div class="export-section">
+                    <button class="export-btn" onclick="copyToClipboard('validation')">📋 Copy</button>
+                    <button class="export-btn" onclick="downloadAsWord('validation')">📄 Word</button>
+                </div>
+            </div>
+
+            <div id="metrics" class="artifact-content">
+                <h3>Key Metrics & OKRs</h3>
+                <div id="metricsContent">Generating metrics...</div>
+                <div class="export-section">
+                    <button class="export-btn" onclick="copyToClipboard('metrics')">📋 Copy</button>
+                    <button class="export-btn" onclick="downloadAsWord('metrics')">📄 Word</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
+    </footer>
+
+    <script>
+        let currentCategory = 'saas';
+        let currentProblem = '';
+
+        // Theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+            showToast(isDark ? '☀️ Light mode' : '🌙 Dark mode', 'success');
+        }
+
+        // Toast
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Navigation
+        function switchPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page).classList.add('active');
+        }
+
+        function switchArtifact(artifact) {
+            document.querySelectorAll('.artifact-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(artifact).classList.add('active');
+            document.querySelectorAll('.artifact-tab').forEach(tab => tab.classList.remove('active'));
+            if (event && event.target) event.target.classList.add('active');
+        }
+
+        // Categories
+        function selectCategory(element, category) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            currentCategory = category;
+        }
+
+        // Samples
+        function useSample(text) {
+            document.getElementById('problemStatement').value = text;
+            document.querySelector('.generate-btn').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Clear Problem Statement
+        function clearProblemStatement() {
+            document.getElementById('problemStatement').value = '';
+            document.getElementById('problemStatement').focus();
+            updateCharCount();
+            showToast('🗑️ Cleared!', 'success');
+        }
+
+        // Update Character Count
+        function updateCharCount() {
+            const textarea = document.getElementById('problemStatement');
+            const count = textarea.value.length;
+            const charCount = document.getElementById('charCount');
+            charCount.textContent = count;
+            charCount.style.color = count > 400 ? '#f59e0b' : (count > 480 ? '#ef4444' : 'var(--text-secondary)');
+        }
+
+        // Generate with Dynamic Canvas
+        function generateArtifacts() {
+            const problem = document.getElementById('problemStatement').value;
+            if (!problem.trim()) {
+                showToast('Please describe your product', 'error');
+                return;
+            }
+
+            currentProblem = problem;
+            const btn = event.target;
+            btn.textContent = '⏳ Generating...';
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            setTimeout(() => {
+                // Update results header
+                document.getElementById('categoryDisplay').textContent = currentCategory.toUpperCase();
+                document.getElementById('problemDisplay').textContent = problem.substring(0, 100) + '...';
+
+                // Update Canvas and all other artifacts
+                updateCanvas(problem);
+                generateAllArtifacts();
+
+                switchPage('resultsPage');
+
+                btn.textContent = '✨ Generate Artifacts';
+                btn.classList.remove('loading');
+                btn.disabled = false;
+
+                showToast('✨ Artifacts generated!', 'success');
+            }, 1500);
+        }
+
+        // Dynamic Canvas Content
+        function updateCanvas(problem) {
+            document.getElementById('canvasProblems').textContent = problem.substring(0, 50) + '...';
+
+            const keywords = problem.toLowerCase();
+            const isB2B = keywords.includes('enterprise') || keywords.includes('company') || keywords.includes('business');
+            const isMarketplace = keywords.includes('marketplace') || keywords.includes('connect') || keywords.includes('freelance');
+            const isFintech = keywords.includes('finance') || keywords.includes('investment') || keywords.includes('payment') || keywords.includes('money');
+
+            // Partners
+            if (isMarketplace) {
+                document.getElementById('partners').textContent = 'Payment processors\nCreators/sellers\nMarketing platforms';
+            } else if (isB2B) {
+                document.getElementById('partners').textContent = 'Enterprise integrators\nSecurity vendors\nCompliance partners';
+            } else {
+                document.getElementById('partners').textContent = 'App stores\nSocial platforms\nInfluencers';
+            }
+
+            // Value Proposition
+            if (isFintech) {
+                document.getElementById('value').textContent = 'Financial security\nBetter returns\nEasy to use';
+            } else if (isMarketplace) {
+                document.getElementById('value').textContent = 'Trusted platform\nFair pricing\nEasy transactions';
+            } else {
+                document.getElementById('value').textContent = 'Solves key problem\nSaves time/money\nBetter experience';
+            }
+
+            // Channels
+            if (isB2B) {
+                document.getElementById('channels').textContent = 'Direct sales\nSales team\nPartnersh partnerships';
+            } else {
+                document.getElementById('channels').textContent = 'App stores\nSocial media\nContent marketing';
+            }
+
+            // Revenue
+            if (isMarketplace) {
+                document.getElementById('revenue').textContent = 'Transaction fees\nPremium listings\nAdvertising';
+            } else if (isFintech) {
+                document.getElementById('revenue').textContent = 'Management fees\nSubscriptions\nTransaction fees';
+            } else {
+                document.getElementById('revenue').textContent = 'Freemium model\nSubscription\nPro features';
+            }
+
+            // Customers
+            if (isB2B) {
+                document.getElementById('segments').textContent = 'Enterprise companies\nMid-market\nSMBs';
+            } else if (isMarketplace) {
+                document.getElementById('segments').textContent = 'Service providers\nBuyers\nPlatform users';
+            } else {
+                document.getElementById('segments').textContent = 'Early adopters\nMass market\nPower users';
+            }
+        }
+
+
+        // Export
+        function copyToClipboard(artifact) {
+            const content = document.getElementById(artifact).innerText;
+            navigator.clipboard.writeText(content);
+            showToast('📋 Copied!', 'success');
+        }
+
+        function downloadAsJSON(artifact) {
+            const content = {
+                type: artifact,
+                category: currentCategory,
+                problem: currentProblem,
+                generated: new Date().toISOString()
+            };
+            const dataStr = JSON.stringify(content, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${artifact}-${Date.now()}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            showToast('⬇️ Downloaded as JSON!', 'success');
+        }
+
+        function downloadAsWord(artifact) {
+            const html = document.getElementById(artifact).innerHTML;
+            const docContent = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${artifact.toUpperCase()}</title>
+</head>
+<body>
+<h1>${artifact.toUpperCase()}</h1>
+<p><b>Problem:</b> ${currentProblem}</p>
+<p><b>Category:</b> ${currentCategory.toUpperCase()}</p>
+<p><b>Generated:</b> ${new Date().toLocaleString()}</p>
+<hr>
+${html}
+<hr>
+<p style="font-size: 10px; color: #999;">Generated by AI Product Artifacts</p>
+</body>
+</html>`;
+
+            const blob = new Blob([docContent], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${artifact}-${Date.now()}.doc`;
+            link.click();
+            URL.revokeObjectURL(url);
+            showToast('⬇️ Downloaded as Word!', 'success');
+        }
+
+        // Smart Artifact Generation
+        function generatePersonas() {
+            const text = currentProblem.toLowerCase();
+            let personas = '<div class="persona-grid">';
+
+            const isB2B = text.includes('enterprise') || text.includes('company') || text.includes('business') || text.includes('team');
+            const isMarketplace = text.includes('marketplace') || text.includes('connect') || text.includes('creator') || text.includes('freelance');
+            const isConsumer = text.includes('app') || text.includes('mobile') || text.includes('user') || text.includes('customer');
+
+            if (isB2B || isMarketplace) {
+                personas += `<div class="persona-card">
+                    <div class="persona-name">Decision Maker</div>
+                    <div class="persona-role">VP/Director evaluating solutions</div>
+                    <p><strong>Goal:</strong> Find solution that improves efficiency and ROI</p>
+                    <p><strong>Pain:</strong> Tool sprawl, implementation time, team adoption</p>
+                    <p><strong>Value:</strong> Clear ROI, easy integration, strong support</p>
+                </div>`;
+            }
+            if (isB2B) {
+                personas += `<div class="persona-card secondary">
+                    <div class="persona-name">End User</div>
+                    <div class="persona-role">Team member using daily</div>
+                    <p><strong>Goal:</strong> Complete work faster with less friction</p>
+                    <p><strong>Pain:</strong> Complex workflows, training overhead</p>
+                    <p><strong>Value:</strong> Intuitive interface, time savings</p>
+                </div>`;
+            }
+            if (isMarketplace) {
+                personas += `<div class="persona-card tertiary">
+                    <div class="persona-name">Service Provider</div>
+                    <div class="persona-role">Creator/seller on platform</div>
+                    <p><strong>Goal:</strong> Reach customers and grow income</p>
+                    <p><strong>Pain:</strong> Discoverability, payment friction</p>
+                    <p><strong>Value:</strong> High visibility, fair commission</p>
+                </div>`;
+            }
+            if (isConsumer) {
+                personas += `<div class="persona-card">
+                    <div class="persona-name">Early Adopter</div>
+                    <div class="persona-role">Tech-savvy consumer</div>
+                    <p><strong>Goal:</strong> Discover and adopt innovative solutions</p>
+                    <p><strong>Pain:</strong> Fragmented experience, limited features</p>
+                    <p><strong>Value:</strong> Cutting-edge, community, extensibility</p>
+                </div>`;
+            }
+
+            personas += '</div>';
+            document.getElementById('personaContent').innerHTML = personas;
+        }
+
+        function generateRequirements() {
+            const text = currentProblem.toLowerCase();
+            let reqs = '<p><strong>Functional:</strong></p><ul style="margin-left: 2rem; margin-bottom: 1rem;">';
+
+            if (text.includes('connect') || text.includes('marketplace') || text.includes('community')) {
+                reqs += '<li>User registration and profile creation</li><li>Search and discovery functionality</li><li>Secure communication between users</li><li>Transaction/payment processing</li>';
+            } else if (text.includes('enterprise') || text.includes('team')) {
+                reqs += '<li>Role-based access control (RBAC)</li><li>Collaboration & real-time updates</li><li>Audit logs & compliance reporting</li><li>Integration APIs for common tools</li>';
+            } else {
+                reqs += '<li>User authentication and account management</li><li>Core feature workflows</li><li>Data import/export capabilities</li><li>Mobile and desktop support</li>';
+            }
+
+            reqs += '</ul><p><strong>Non-Functional:</strong></p><ul style="margin-left: 2rem;">';
+            reqs += '<li>99%+ uptime SLA</li><li>Sub-2s page load times</li><li>GDPR/compliance ready</li><li>Scalable to 1M+ users</li></ul>';
+            document.getElementById('requirementsContent').innerHTML = reqs;
+        }
+
+        function generateGTM() {
+            const text = currentProblem.toLowerCase();
+            let gtm = '<p><strong>Target Market:</strong></p>';
+
+            if (text.includes('enterprise')) {
+                gtm += '<p>Mid-to-large enterprises (500+ employees) facing [problem]. TAM: $5B+</p>';
+                gtm += '<p><strong>Go-to-Market:</strong> Direct sales + partner channels. Entry via 2-3 pilot customers, then expansion through resellers.</p>';
+            } else if (text.includes('marketplace') || text.includes('creator')) {
+                gtm += '<p>Creators and service providers in [vertical]. Supply-side: 1K+ service providers. Demand-side: 10K+ initial customers.</p>';
+                gtm += '<p><strong>Go-to-Market:</strong> Network effects. Launch with provider recruitment + user acquisition campaigns. Growth via word-of-mouth.</p>';
+            } else {
+                gtm += '<p>Early adopters + tech-savvy consumers. Expand to mainstream post-product-market-fit.</p>';
+                gtm += '<p><strong>Go-to-Market:</strong> Product-led growth + content marketing. Launch on ProductHunt, HN. Build community.</p>';
+            }
+
+            gtm += '<p><strong>Pricing:</strong> Freemium with premium tier OR subscription based on usage/team size.</p>';
+            document.getElementById('gtmContent').innerHTML = gtm;
+        }
+
+        function generateFeatures() {
+            const text = currentProblem.toLowerCase();
+            let features = '<p><strong>MVP (3 months):</strong></p><ul style="margin-left: 2rem; margin-bottom: 1rem;">';
+
+            if (text.includes('connect') || text.includes('marketplace')) {
+                features += '<li>User onboarding & profiles</li><li>Search & basic matching</li><li>Messaging system</li><li>Payment integration</li>';
+            } else if (text.includes('enterprise') || text.includes('team')) {
+                features += '<li>User & workspace management</li><li>Core workflows + permissions</li><li>Basic reporting</li><li>API foundation</li>';
+            } else {
+                features += '<li>Authentication system</li><li>Core feature (what solves the problem)</li><li>Mobile support</li><li>Basic analytics</li>';
+            }
+
+            features += '</ul><p><strong>Phase 2 (6 months):</strong> Advanced search, analytics dashboard, integrations, automation</p>';
+            features += '<p><strong>Phase 3 (12 months):</strong> AI features, white-label option, advanced customization</p>';
+            document.getElementById('featuresContent').innerHTML = features;
+        }
+
+        function generateValidation() {
+            let validation = '<p><strong>Phase 1: Problem Validation (Weeks 1-4)</strong></p>';
+            validation += '<ul style="margin-left: 2rem; margin-bottom: 1rem;"><li>Conduct 20 customer interviews</li><li>Validate pricing willingness</li><li>Identify top 3 pain points</li></ul>';
+
+            validation += '<p><strong>Phase 2: MVP Launch (Weeks 5-12)</strong></p>';
+            validation += '<ul style="margin-left: 2rem; margin-bottom: 1rem;"><li>Launch closed beta (10-20 users)</li><li>Target metrics: NPS > 40, retention > 60%</li><li>Collect feature requests</li></ul>';
+
+            validation += '<p><strong>Phase 3: Growth (Weeks 13+)</strong></p>';
+            validation += '<ul style="margin-left: 2rem;"><li>Expand to 100+ users</li><li>Achieve product-market fit signals</li><li>Public launch readiness</li></ul>';
+            document.getElementById('validationContent').innerHTML = validation;
+        }
+
+        function generateMetrics() {
+            let metrics = '<p><strong>Q1 OKRs:</strong></p><ul style="margin-left: 2rem; margin-bottom: 1rem;">';
+            metrics += '<li>OKR 1: Acquire 1K+ users/early customers</li>';
+            metrics += '<li>OKR 2: Achieve NPS > 50</li>';
+            metrics += '<li>OKR 3: 30-day retention > 70%</li>';
+            metrics += '</ul>';
+
+            metrics += '<p><strong>Key Metrics to Track:</strong></p><ul style="margin-left: 2rem;">';
+            metrics += '<li>Monthly Active Users (MAU) & Daily Active Users (DAU)</li>';
+            metrics += '<li>Customer Acquisition Cost (CAC)</li>';
+            metrics += '<li>Churn Rate (target: < 5% monthly)</li>';
+            metrics += '<li>Net Revenue Retention (target: > 110%)</li>';
+            metrics += '<li>Time-to-value & activation rate</li></ul>';
+            document.getElementById('metricsContent').innerHTML = metrics;
+        }
+
+        // Generate all artifacts when creation happens
+        function generateAllArtifacts() {
+            generatePersonas();
+            generateRequirements();
+            generateGTM();
+            generateFeatures();
+            generateValidation();
+            generateMetrics();
+        }
+
+        // Update Canvas
+        function updateCanvasAndArtifacts(problem) {
+            updateCanvas(problem);
+            generateAllArtifacts();
+        }
+
+        // Projects (stub for future implementation)
+        function loadProjects() {
+            // Future: Load saved projects from localStorage
+        }
+
+        // Init
+        loadProjects();
+    </script>
+</body>
+</html>

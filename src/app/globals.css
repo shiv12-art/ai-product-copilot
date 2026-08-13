@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Root styles */
+html {
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+* {
+  @apply transition-colors duration-200;
+}
+
+body {
+  @apply bg-white dark:bg-slate-950;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-slate-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-slate-700 rounded-full hover:bg-gray-400 dark:hover:bg-slate-600;
+}
+
+/* Selection styling */
+::selection {
+  @apply bg-blue-500 text-white;
+}
+
+::-moz-selection {
+  @apply bg-blue-500 text-white;
+}
+
+/* Typography */
+h1 { @apply text-4xl font-bold tracking-tight; }
+h2 { @apply text-3xl font-bold tracking-tight; }
+h3 { @apply text-2xl font-semibold; }
+h4 { @apply text-xl font-semibold; }
+
+/* Markdown styles */
+.markdown {
+  @apply max-w-none text-slate-700 dark:text-slate-300;
+}
+
+.markdown h1 {
+  @apply text-3xl font-bold mt-8 mb-4 text-slate-900 dark:text-white;
+}
+
+.markdown h2 {
+  @apply text-2xl font-bold mt-6 mb-3 text-slate-800 dark:text-slate-100 border-b-2 border-blue-200 dark:border-blue-900 pb-2;
+}
+
+.markdown h3 {
+  @apply text-lg font-semibold mt-4 mb-2 text-slate-700 dark:text-slate-200;
+}
+
+.markdown p {
+  @apply text-slate-700 dark:text-slate-300 mb-4 leading-relaxed;
+}
+
+.markdown ul,
+.markdown ol {
+  @apply my-4 ml-6 space-y-2;
+}
+
+.markdown li {
+  @apply text-slate-700 dark:text-slate-300;
+}
+
+.markdown strong {
+  @apply font-semibold text-slate-900 dark:text-white;
+}
+
+.markdown em {
+  @apply italic text-slate-700 dark:text-slate-300;
+}
+
+.markdown code {
+  @apply bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded text-sm font-mono text-slate-900 dark:text-slate-100;
+}
+
+.markdown pre {
+  @apply bg-slate-100 dark:bg-slate-800 p-4 rounded-lg my-4 overflow-x-auto border border-slate-200 dark:border-slate-700;
+}
+
+.markdown table {
+  @apply w-full border-collapse border border-slate-300 dark:border-slate-600 my-4;
+}
+
+.markdown th,
+.markdown td {
+  @apply border border-slate-300 dark:border-slate-600 px-4 py-2 text-left;
+}
+
+.markdown th {
+  @apply bg-slate-100 dark:bg-slate-800 font-semibold;
+}
+
+/* Utility classes */
+.gradient-bg {
+  background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+}
+
+.card {
+  @apply bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-slate-200 dark:border-slate-800 transition-all hover:shadow-md;
+}
+
+.btn-primary {
+  @apply px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 active:bg-blue-800 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors;
+}
+
+.input-field {
+  @apply w-full px-4 py-2 border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg focus:border-blue-500 focus:outline-none transition-colors;
+}
+
+/* Loading animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Fade animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-out;
+}
+
+/* Print styles */
+@media print {
+  body {
+    @apply bg-white;
+  }
+
+  .no-print {
+    @apply hidden;
+  }
+
+  .markdown {
+    @apply break-inside-avoid;
+  }
+}

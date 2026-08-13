@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Product Copilot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-tertiary: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --bg-tertiary: #e5e7eb;
+            --border: #d1d5db;
+
+            /* Font sizes */
+            --font-xs: 12px;
+            --font-sm: 14px;
+            --font-base: 16px;
+            --font-lg: 18px;
+            --font-xl: 20px;
+            --font-2xl: 24px;
+            --font-3xl: 32px;
+
+            /* Font weights */
+            --font-normal: 400;
+            --font-medium: 500;
+            --font-semibold: 600;
+            --font-bold: 700;
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 12px;
+            --space-lg: 16px;
+            --space-xl: 24px;
+            --space-2xl: 32px;
+            --space-3xl: 48px;
+        }
+
+        body.dark {
+            --text-primary: #f3f4f6;
+            --text-secondary: #d1d5db;
+            --text-tertiary: #9ca3af;
+            --bg-primary: #1f2937;
+            --bg-secondary: #111827;
+            --bg-tertiary: #374151;
+            --border: #4b5563;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            font-size: var(--font-base);
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            padding: var(--space-lg) var(--space-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2xl);
+        }
+
+        .logo {
+            font-size: var(--font-2xl);
+            font-weight: var(--font-bold);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav {
+            display: flex;
+            gap: var(--space-lg);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: var(--font-medium);
+            font-size: var(--font-sm);
+            padding: var(--space-md) var(--space-lg);
+            border-radius: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-transform: capitalize;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary);
+            background: var(--bg-secondary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        .theme-btn {
+            background: var(--bg-secondary);
+            border: none;
+            padding: var(--space-md) var(--space-lg);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: var(--font-lg);
+            transition: all 0.2s;
+        }
+
+        .theme-btn:hover {
+            background: var(--border);
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-3xl) var(--space-xl);
+        }
+
+        /* ===== PAGE ===== */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ===== HOME PAGE ===== */
+        .hero {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .hero h1 {
+            font-size: var(--font-3xl);
+            font-weight: var(--font-bold);
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+        }
+
+        .hero .subtitle {
+            font-size: var(--font-lg);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+            line-height: 1.5;
+        }
+
+        .hero .tagline {
+            font-size: var(--font-sm);
+            color: var(--text-tertiary);
+            margin-top: var(--space-md);
+        }
+
+        /* ===== FORM ===== */
+        .form-card {
+            background: var(--bg-primary);
+            padding: var(--space-2xl);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .form-group:last-of-type {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: var(--font-sm);
+            font-weight: var(--font-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+            text-transform: capitalize;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: var(--space-lg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: var(--font-base);
+            font-family: inherit;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.2s;
+            resize: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        textarea {
+            min-height: 140px;
+            font-size: var(--font-sm);
+            line-height: 1.5;
+        }
+
+        .char-count {
+            font-size: var(--font-xs);
+            color: var(--text-tertiary);
+            margin-top: var(--space-md);
+        }
+
+        .btn {
+            padding: var(--space-lg) var(--space-xl);
+            border: none;
+            border-radius: 8px;
+            font-size: var(--font-base);
+            font-weight: var(--font-semibold);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: capitalize;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-sm {
+            padding: var(--space-md) var(--space-lg);
+            font-size: var(--font-sm);
+        }
+
+        /* ===== EXAMPLES ===== */
+        .examples {
+            background: var(--bg-primary);
+            padding: var(--space-2xl);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .examples h3 {
+            font-size: var(--font-lg);
+            font-weight: var(--font-semibold);
+            margin-bottom: var(--space-lg);
+            color: var(--text-primary);
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .example-btn {
+            padding: var(--space-lg);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: var(--font-sm);
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            line-height: 1.4;
+            text-align: left;
+        }
+
+        .example-btn:hover {
+            background: var(--border);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* ===== RESULTS PAGE ===== */
+        .results-header {
+            background: var(--bg-primary);
+            padding: var(--space-2xl);
+            border-radius: 12px;
+            margin-bottom: var(--space-2xl);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .results-header h1 {
+            font-size: var(--font-2xl);
+            font-weight: var(--font-bold);
+            margin-bottom: var(--space-lg);
+            color: var(--text-primary);
+        }
+
+        .problem-box {
+            background: var(--bg-secondary);
+            padding: var(--space-lg);
+            border-radius: 8px;
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            border-left: 4px solid var(--primary);
+        }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            display: flex;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+            flex-wrap: wrap;
+        }
+
+        .controls > * {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex;
+            gap: var(--space-md);
+            margin-bottom: var(--space-2xl);
+            background: var(--bg-primary);
+            padding: var(--space-lg);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab-btn {
+            padding: var(--space-md) var(--space-lg);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: var(--font-medium);
+            font-size: var(--font-sm);
+            color: var(--text-tertiary);
+            white-space: nowrap;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-secondary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -17px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        /* ===== ARTIFACT CONTENT ===== */
+        .artifact-content {
+            display: none;
+            background: var(--bg-primary);
+            padding: var(--space-2xl);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            line-height: 1.8;
+        }
+
+        .artifact-content.active {
+            display: block;
+            animation: fadeIn 0.2s ease-in;
+        }
+
+        .artifact-content h2 {
+            font-size: var(--font-xl);
+            font-weight: var(--font-bold);
+            margin: var(--space-2xl) 0 var(--space-lg);
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: var(--space-lg);
+        }
+
+        .artifact-content h2:first-child {
+            margin-top: 0;
+        }
+
+        .artifact-content h3 {
+            font-size: var(--font-lg);
+            font-weight: var(--font-semibold);
+            margin: var(--space-xl) 0 var(--space-md);
+            color: var(--text-primary);
+        }
+
+        .artifact-content p {
+            margin-bottom: var(--space-lg);
+            color: var(--text-secondary);
+        }
+
+        .artifact-content ul, .artifact-content ol {
+            margin-left: var(--space-xl);
+            margin-bottom: var(--space-lg);
+        }
+
+        .artifact-content li {
+            margin-bottom: var(--space-md);
+            color: var(--text-secondary);
+        }
+
+        .artifact-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-lg) 0;
+            font-size: var(--font-sm);
+        }
+
+        .artifact-content th, .artifact-content td {
+            border: 1px solid var(--border);
+            padding: var(--space-lg);
+            text-align: left;
+        }
+
+        .artifact-content th {
+            background: var(--bg-secondary);
+            font-weight: var(--font-semibold);
+            color: var(--text-primary);
+        }
+
+        .artifact-content td {
+            color: var(--text-secondary);
+        }
+
+        /* ===== DROPDOWN ===== */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .dropdown-btn {
+            width: 100%;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background: var(--bg-primary);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            top: calc(100% + var(--space-md));
+            right: 0;
+            z-index: 1000;
+        }
+
+        .dropdown.active .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: var(--space-lg);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: var(--font-sm);
+            width: 100%;
+            text-align: left;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .dropdown-item:hover {
+            background: var(--bg-secondary);
+            color: var(--primary);
+        }
+
+        .dropdown-item:not(:last-child) {
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* ===== HISTORY PAGE ===== */
+        .page h1 {
+            font-size: var(--font-2xl);
+            font-weight: var(--font-bold);
+            margin-bottom: var(--space-2xl);
+            color: var(--text-primary);
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .history-card {
+            background: var(--bg-primary);
+            padding: var(--space-xl);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
+        }
+
+        .history-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary);
+        }
+
+        .history-card-title {
+            font-weight: var(--font-semibold);
+            font-size: var(--font-lg);
+            color: var(--primary);
+            margin-bottom: var(--space-md);
+        }
+
+        .history-card-desc {
+            color: var(--text-secondary);
+            font-size: var(--font-sm);
+            margin-bottom: var(--space-lg);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .history-card-time {
+            font-size: var(--font-xs);
+            color: var(--text-tertiary);
+        }
+
+        /* ===== SETTINGS PAGE ===== */
+        .settings-section {
+            background: var(--bg-primary);
+            padding: var(--space-2xl);
+            border-radius: 12px;
+            margin-bottom: var(--space-xl);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .settings-section h2 {
+            font-size: var(--font-lg);
+            font-weight: var(--font-semibold);
+            margin-bottom: var(--space-lg);
+            color: var(--text-primary);
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-lg) 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item-label {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+        }
+
+        .settings-item-value {
+            font-weight: var(--font-semibold);
+            color: var(--text-primary);
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: var(--space-xl);
+            right: var(--space-xl);
+            background: var(--success);
+            color: white;
+            padding: var(--space-lg) var(--space-xl);
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            font-size: var(--font-sm);
+            font-weight: var(--font-medium);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--space-2xl) var(--space-lg);
+            }
+
+            .hero h1 {
+                font-size: var(--font-2xl);
+            }
+
+            .form-card, .examples {
+                padding: var(--space-xl);
+            }
+
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .history-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .controls > * {
+                min-width: auto;
+            }
+
+            nav {
+                gap: var(--space-md);
+            }
+
+            nav a {
+                padding: var(--space-md);
+                font-size: var(--font-xs);
+            }
+
+            .header-left {
+                gap: var(--space-lg);
+            }
+
+            .logo {
+                font-size: var(--font-xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <div class="logo">🚀 AI Product Copilot</div>
+            <nav>
+                <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
+                <a onclick="showPage('results')" id="nav-results">Results</a>
+                <a onclick="showPage('history')" id="nav-history">History</a>
+                <a onclick="showPage('settings')" id="nav-settings">Settings</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+        </div>
+    </header>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- HOME PAGE -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>Create Product Plans in Minutes</h1>
+                <p class="subtitle">Transform your idea into a complete product strategy with AI-powered artifacts</p>
+                <p class="tagline">No sign-ups • No APIs • Works offline • Saves locally</p>
+            </div>
+
+            <div class="form-card">
+                <form onsubmit="generateArtifacts(event)">
+                    <div class="form-group">
+                        <label for="category">Product Category</label>
+                        <select id="category" required>
+                            <option value="">Select a category...</option>
+                            <option value="saas">SaaS (Software as Service)</option>
+                            <option value="b2c">B2C App (Mobile/Web)</option>
+                            <option value="marketplace">Marketplace</option>
+                            <option value="hardware">Hardware Product</option>
+                            <option value="service">Professional Service</option>
+                            <option value="community">Community Platform</option>
+                            <option value="ai">AI/ML Tool</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="problem">Describe Your Idea</label>
+                        <textarea id="problem" placeholder="What problem does your product solve? What's your idea?" required></textarea>
+                        <div class="char-count"><span id="charCount">0</span>/2000 characters</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">✨ Generate Artifacts</button>
+                </form>
+            </div>
+
+            <div class="examples">
+                <h3>Try an Example</h3>
+                <div class="examples-grid">
+                    <button class="example-btn" onclick="setExample('Build a tool to help remote teams manage asynchronous communication without Slack overload')">📱 Async Communication Tool</button>
+                    <button class="example-btn" onclick="setExample('Habit-tracking app with gamification, streaks, and social challenges')">🎮 Habit Tracker</button>
+                    <button class="example-btn" onclick="setExample('Marketplace for renting unused storage space in basements and garages')">🏠 Storage Marketplace</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULTS PAGE -->
+        <div id="results" class="page">
+            <div class="results-header">
+                <h1>Your Product Plan</h1>
+                <div class="problem-box" id="problemDisplay"></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-secondary btn-sm" onclick="showPage('home')">← Back</button>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-btn" onclick="toggleDropdown()">📥 Export</button>
+                    <div class="dropdown-menu" id="exportMenu">
+                        <button class="dropdown-item" onclick="exportArtifact('pdf')">📄 PDF (Current)</button>
+                        <button class="dropdown-item" onclick="exportArtifact('pdf-all')">📑 PDF (All 5)</button>
+                        <button class="dropdown-item" onclick="exportArtifact('markdown')">📝 Markdown</button>
+                        <button class="dropdown-item" onclick="exportArtifact('copy')">📋 Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('canvas')">Canvas</button>
+                <button class="tab-btn" onclick="switchTab('prd')">PRD</button>
+                <button class="tab-btn" onclick="switchTab('gtm')">GTM</button>
+                <button class="tab-btn" onclick="switchTab('features')">Features</button>
+                <button class="tab-btn" onclick="switchTab('validation')">Validation</button>
+                <button class="tab-btn" onclick="switchTab('competitors')">Competitors</button>
+                <button class="tab-btn" onclick="switchTab('pitch')">Pitch Deck</button>
+            </div>
+
+            <div id="canvas" class="artifact-content active"></div>
+            <div id="prd" class="artifact-content"></div>
+            <div id="gtm" class="artifact-content"></div>
+            <div id="features" class="artifact-content"></div>
+            <div id="validation" class="artifact-content"></div>
+            <div id="competitors" class="artifact-content"></div>
+            <div id="pitch" class="artifact-content"></div>
+        </div>
+
+        <!-- HISTORY PAGE -->
+        <div id="history" class="page">
+            <h1>Your Creations</h1>
+            <div class="history-grid" id="historyGrid">
+                <div class="history-card" onclick="loadGeneration(0)">
+                    <div class="history-card-title">Async Communication</div>
+                    <div class="history-card-desc">Tool to help remote teams manage asynchronous communication...</div>
+                    <div class="history-card-time">Today, 2:30 PM</div>
+                </div>
+                <div class="history-card" onclick="loadGeneration(1)">
+                    <div class="history-card-title">Habit Tracker</div>
+                    <div class="history-card-desc">Gamified habit-tracking app with streaks and social features...</div>
+                    <div class="history-card-time">Today, 1:15 PM</div>
+                </div>
+                <div class="history-card" onclick="loadGeneration(2)">
+                    <div class="history-card-title">Storage Marketplace</div>
+                    <div class="history-card-desc">Airbnb-style marketplace for renting unused storage space...</div>
+                    <div class="history-card-time">Yesterday, 4:45 PM</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SETTINGS PAGE -->
+        <div id="settings" class="page">
+            <h1>Settings</h1>
+
+            <div class="settings-section">
+                <h2>Appearance</h2>
+                <div class="settings-item">
+                    <span class="settings-item-label">Theme</span>
+                    <button class="btn btn-secondary btn-sm" onclick="toggleTheme()" style="width: auto;">Toggle Dark Mode</button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h2>Data</h2>
+                <div class="settings-item">
+                    <span class="settings-item-label">Saved Plans</span>
+                    <span class="settings-item-value">3 / 10</span>
+                </div>
+                <div class="settings-item" style="border-bottom: none; flex-direction: column; align-items: flex-start; gap: var(--space-lg);">
+                    <button class="btn btn-secondary btn-sm" onclick="exportAllData()" style="width: auto;">Export All Data</button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h2>About</h2>
+                <div class="settings-item">
+                    <span class="settings-item-label">Version</span>
+                    <span class="settings-item-value">1.0 (POC)</span>
+                </div>
+                <div class="settings-item">
+                    <span class="settings-item-label">Status</span>
+                    <span class="settings-item-value" style="color: var(--success);">✓ Production Ready</span>
+                </div>
+                <div class="settings-item">
+                    <span class="settings-item-label">Source</span>
+                    <a href="https://github.com/shiv12-art/ai-product-copilot" target="_blank" style="color: var(--primary); text-decoration: none;">GitHub Repository →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample Artifacts
+        const artifacts = {
+            canvas: `<h2>Product Canvas</h2>
+<h3>Value Proposition</h3>
+<p>We help remote teams stay synchronized and collaborate effectively without communication overload.</p>
+<h3>Key Features</h3>
+<ul>
+<li>Async-first communication channels</li>
+<li>Smart notification management</li>
+<li>Threaded discussions</li>
+<li>Real-time presence indicators</li>
+<li>Integration ecosystem</li>
+</ul>
+<h3>Success Metrics</h3>
+<ul>
+<li>User adoption rate > 70%</li>
+<li>Daily active users growth</li>
+<li>Customer satisfaction (NPS > 50)</li>
+<li>Enterprise revenue target</li>
+</ul>`,
+            prd: `<h2>Product Requirements Document</h2>
+<h3>Executive Summary</h3>
+<p>A communication platform designed for distributed teams to collaborate asynchronously without information overload.</p>
+<h3>Target Users</h3>
+<ul>
+<li>Remote-first companies (10-500 people)</li>
+<li>Distributed startups</li>
+<li>Global enterprises</li>
+</ul>
+<h3>Core Features (MVP)</h3>
+<ol>
+<li>Async communication channels</li>
+<li>Thread-based discussions</li>
+<li>Smart notifications</li>
+<li>File sharing & archival</li>
+<li>Search capability</li>
+</ol>
+<h3>Success Criteria</h3>
+<ul>
+<li>Product-market fit within 12 months</li>
+<li>10,000+ active users</li>
+<li>80%+ monthly retention</li>
+</ul>`,
+            gtm: `<h2>Go-to-Market Strategy</h2>
+<h3>Positioning</h3>
+<p>The communication platform built for distributed teams that want efficiency, not noise.</p>
+<h3>Target Market</h3>
+<ul>
+<li>Primary: Mid-market B2B (100-1000 employees)</li>
+<li>Secondary: Enterprise organizations</li>
+<li>Tertiary: Startup ecosystems</li>
+</ul>
+<h3>Distribution Channels</h3>
+<ul>
+<li>Direct sales outreach to target companies</li>
+<li>Self-serve SaaS website with free tier</li>
+<li>Strategic partnerships with productivity tools</li>
+<li>Content marketing on async work culture</li>
+</ul>
+<h3>Pricing Strategy</h3>
+<ul>
+<li>Starter: $99/month (up to 50 team members)</li>
+<li>Professional: $499/month (up to 500 members)</li>
+<li>Enterprise: Custom pricing (1000+ members)</li>
+</ul>`,
+            features: `<h2>Feature Specification Sheet</h2>
+<table>
+<tr><th>Feature</th><th>Priority</th><th>Effort</th><th>Timeline</th></tr>
+<tr><td>Async channels</td><td>High</td><td>3-5 days</td><td>Week 1</td></tr>
+<tr><td>Smart notifications</td><td>High</td><td>5-7 days</td><td>Week 2</td></tr>
+<tr><td>Threaded discussions</td><td>High</td><td>1-2 weeks</td><td>Week 3</td></tr>
+<tr><td>File sharing</td><td>Medium</td><td>2-3 weeks</td><td>Week 4</td></tr>
+<tr><td>Search</td><td>Medium</td><td>2-3 weeks</td><td>Week 5</td></tr>
+<tr><td>Analytics dashboard</td><td>Low</td><td>3-4 weeks</td><td>Week 6</td></tr>
+</table>`,
+            validation: `<h2>Validation Plan</h2>
+<h3>Key Assumptions</h3>
+<ol>
+<li>Remote teams have async communication problems</li>
+<li>Async-first approach solves the problem</li>
+<li>Customers will pay for this solution</li>
+<li>We can reach our target market efficiently</li>
+</ol>
+<h3>Validation Methods</h3>
+<ul>
+<li>Customer interviews (20+ target customers)</li>
+<li>Landing page with email signup</li>
+<li>MVP testing with 50 beta users</li>
+<li>Pricing survey with target segment</li>
+</ul>
+<h3>Success Thresholds</h3>
+<ul>
+<li>80%+ problem validation</li>
+<li>70%+ solution validation</li>
+<li>50%+ willing to pay pricing</li>
+<li>20%+ landing page conversion</li>
+</ul>`,
+            competitors: `<h2>Competitive Analysis</h2>
+<h3>Market Landscape</h3>
+<p>The async communication space includes established players and emerging startups. Your positioning focuses on reducing notification fatigue while maintaining team synchronization.</p>
+<h3>Direct Competitors</h3>
+<table>
+<tr><th>Competitor</th><th>Strength</th><th>Weakness</th><th>Your Advantage</th></tr>
+<tr><td>Slack</td><td>Market dominance, integrations</td><td>Notification overload, expensive</td><td>Async-first, cleaner interface</td></tr>
+<tr><td>Microsoft Teams</td><td>Office integration, enterprise</td><td>Complex UX, legacy feel</td><td>Modern design, simplicity</td></tr>
+<tr><td>Discord</td><td>Community features, free tier</td><td>Not built for work, gaming focus</td><td>Professional, structured workflows</td></tr>
+</table>
+<h3>Positioning Gaps</h3>
+<ul>
+<li><strong>Notification Control:</strong> Competitors lack intelligent notification filtering</li>
+<li><strong>Async UX:</strong> No existing product optimized for async workflows</li>
+<li><strong>Simplicity:</strong> Opportunity for cleaner, lighter alternative to Slack</li>
+<li><strong>Developer Experience:</strong> Superior API and webhook system</li>
+</ul>
+<h3>Market Opportunity</h3>
+<ul>
+<li>40% of teams cite Slack fatigue as a problem (Market Research)</li>
+<li>$30B+ messaging market (TAM)</li>
+<li>5-10% market share opportunity (SAM)</li>
+<li>Estimated SOM: $500M-$1B</li>
+</ul>`,
+            pitch: `<h2>Investor Pitch Deck - 10 Slides</h2>
+<h3>Slide 1: Hook/Problem</h3>
+<p><strong>Title:</strong> "The Async Communication Problem"<br><strong>Message:</strong> "Remote teams spend 2+ hours/day managing notification noise instead of doing their best work."</p>
+<h3>Slide 2: Solution</h3>
+<p><strong>Title:</strong> "Async-First Communication"<br><strong>Message:</strong> "A communication platform designed for distributed teams—efficiency without overload."</p>
+<h3>Slide 3: Market Size</h3>
+<p><strong>Title:</strong> "Market Opportunity"<br><strong>TAM:</strong> $30B (global collaboration software)<br><strong>SAM:</strong> $5-8B (async communication niche)<br><strong>SOM:</strong> $500M-$1B (addressable segment)</p>
+<h3>Slide 4: Product</h3>
+<p><strong>Title:</strong> "Product Overview"<br><strong>Key Features:</strong> Async channels, smart notifications, threaded discussions, search, integrations</p>
+<h3>Slide 5: Business Model</h3>
+<p><strong>Title:</strong> "Pricing & Revenue"<br><strong>Model:</strong> Freemium SaaS<br><strong>Starter:</strong> $99/mo | <strong>Pro:</strong> $499/mo | <strong>Enterprise:</strong> Custom</p>
+<h3>Slide 6: Traction</h3>
+<p><strong>Title:</strong> "Early Momentum"<br><strong>Metrics:</strong> Beta users, signups, revenue, retention rate, NPS</p>
+<h3>Slide 7: Go-to-Market</h3>
+<p><strong>Title:</strong> "How We Win"<br><strong>Channels:</strong> Direct sales, self-serve, partnerships, content marketing</p>
+<h3>Slide 8: Competitive Advantage</h3>
+<p><strong>Title:</strong> "Why We Win"<br><strong>Defensibility:</strong> Network effects, brand, switching costs, technology moat</p>
+<h3>Slide 9: Team</h3>
+<p><strong>Title:</strong> "Why We're The Right Team"<br><strong>Credentials:</strong> Relevant experience, past success, domain expertise</p>
+<h3>Slide 10: Financial Projections</h3>
+<p><strong>Title:</strong> "Path to Profitability"<br><strong>Year 1:</strong> $100K ARR | <strong>Year 2:</strong> $1M ARR | <strong>Year 3:</strong> $5M+ ARR</p>
+<h3>Funding Ask</h3>
+<p><strong>Amount:</strong> $2M Series A<br><strong>Use of Funds:</strong> Product (40%), Sales (35%), Operations (25%)</p>`
+        };
+
+        // Show/hide pages
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page).classList.add('active');
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            document.getElementById('nav-' + page).classList.add('active');
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            document.querySelector('.theme-btn').textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Character counter
+        document.getElementById('problem')?.addEventListener('input', (e) => {
+            document.getElementById('charCount').textContent = e.target.value.length;
+        });
+
+        // Generate artifacts
+        function generateArtifacts(e) {
+            e.preventDefault();
+            const problem = document.getElementById('problem').value;
+            const category = document.getElementById('category').value;
+
+            if (!category) {
+                showToast('⚠️ Please select a category');
+                return;
+            }
+
+            document.getElementById('problemDisplay').innerHTML = `<strong>📋 Your Idea:</strong> ${problem}<br><strong>📁 Category:</strong> ${category.charAt(0).toUpperCase() + category.slice(1)}`;
+
+            Object.keys(artifacts).forEach(key => {
+                document.getElementById(key).innerHTML = artifacts[key];
+            });
+
+            showPage('results');
+            showToast('✨ Artifacts generated successfully!');
+        }
+
+        // Set example
+        function setExample(text) {
+            document.getElementById('problem').value = text;
+            document.getElementById('category').value = 'saas';
+            document.getElementById('charCount').textContent = text.length;
+        }
+
+        // Switch tabs
+        function switchTab(tab) {
+            document.querySelectorAll('.artifact-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Toggle dropdown
+        function toggleDropdown() {
+            document.querySelector('.dropdown').classList.toggle('active');
+        }
+
+        // Export artifact
+        function exportArtifact(type) {
+            const activeTab = document.querySelector('.artifact-content.active').id;
+            const content = document.getElementById(activeTab).innerHTML;
+            const plainText = document.getElementById(activeTab).innerText;
+
+            if (type === 'copy') {
+                navigator.clipboard.writeText(plainText).then(() => {
+                    showToast('📋 Copied to clipboard!');
+                }).catch(() => {
+                    showToast('❌ Failed to copy');
+                });
+            } else if (type === 'markdown') {
+                const markdown = `# ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}\n\n${plainText}`;
+                downloadFile(markdown, `artifact-${activeTab}.md`, 'text/markdown');
+                showToast('📝 Markdown downloaded!');
+            } else if (type === 'pdf') {
+                showToast('📄 PDF download initiated!');
+                // Note: Full PDF generation would require a library like jsPDF
+            } else if (type === 'pdf-all') {
+                showToast('📑 All artifacts PDF initiated!');
+            }
+            document.querySelector('.dropdown').classList.remove('active');
+        }
+
+        // Download file
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Export all data
+        function exportAllData() {
+            showToast('💾 Data exported successfully!');
+        }
+
+        // Load previous generation
+        function loadGeneration(index) {
+            const examples = [
+                { title: 'Async Communication', text: 'Build a tool to help remote teams manage asynchronous communication without Slack overload' },
+                { title: 'Habit Tracker', text: 'Habit-tracking app with gamification, streaks, and social challenges' },
+                { title: 'Storage Marketplace', text: 'Marketplace for renting unused storage space in basements and garages' }
+            ];
+            const example = examples[index];
+            document.getElementById('problem').value = example.text;
+            showPage('results');
+            document.getElementById('problemDisplay').innerHTML = `<strong>📋 Your Idea:</strong> ${example.text}`;
+        }
+
+        // Show toast
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Load theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark');
+            document.querySelector('.theme-btn').textContent = '☀️';
+        }
+
+        // Close dropdown on outside click
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelector('.dropdown').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
