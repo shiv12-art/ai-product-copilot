@@ -1,12 +1,6 @@
 {
-  "buildCommand": "echo 'Serving static files'",
-  "outputDirectory": ".",
+  "buildCommand": "next build",
+  "outputDirectory": ".next",
   "cleanUrls": true,
-  "trailingSlash": false,
-  "routes": [
-    {
-      "src": "/.*",
-      "dest": "/index.html"
-    }
-  ]
+  "trailingSlash": false
 }
