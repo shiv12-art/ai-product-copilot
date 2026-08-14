@@ -8,7 +8,7 @@ import { useGenerationStore } from '@/lib/storage/generationStore'
 import { Generation } from '@/types/generation'
 import ReactMarkdown from 'react-markdown'
 
-const ARTIFACTS = ['canvas', 'prd', 'gtm', 'features', 'validation', 'competitive', 'metrics'] as const
+const ARTIFACTS = ['canvas', 'prd', 'gtm', 'features', 'validation', 'competitive', 'pitch'] as const
 const ARTIFACT_TITLES: Record<typeof ARTIFACTS[number], string> = {
   canvas: 'Business Canvas',
   prd: 'Product Requirements',
@@ -16,7 +16,7 @@ const ARTIFACT_TITLES: Record<typeof ARTIFACTS[number], string> = {
   features: 'Feature Specification',
   validation: 'Validation Plan',
   competitive: 'Competitive Analysis',
-  metrics: 'Success Metrics',
+  pitch: 'Pitch Deck',
 }
 
 export default function ArtifactPage() {
