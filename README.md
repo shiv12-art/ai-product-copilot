@@ -1,19 +1,16 @@
-# AI Product Copilot - Standalone HTML Demo
+# AI Product Copilot
 
-A lightning-fast, offline-capable AI-powered product planning tool that generates 7 professional product artifacts in seconds.
+A Next.js powered AI product planning tool that generates 7 professional product artifacts instantly.
 
 ## 🚀 Quick Start
 
-### Access the Demo
-Open the HTML file directly in your browser:
-```
-C:\Users\ls114567\Desktop\AI-Product-Assistant\ai-product-copilot\product-artifacts-enhanced.html
+### Development
+```bash
+npm install
+npm run dev
 ```
 
-Or use this file:// URL:
-```
-file:///C:\Users\ls114567\Desktop\AI-Product-Assistant\ai-product-copilot\product-artifacts-enhanced.html
-```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### How It Works
 1. **Enter Problem Statement** - Describe your product idea (up to 500 characters)
@@ -118,16 +115,9 @@ The artifact generator analyzes your problem statement and automatically:
 5. FutureWealth - Gamified investing
 6. DevSync - Engineering collaboration
 
-## 📦 File Structure
+## 📦 Architecture
 
-```
-ai-product-copilot/
-├── product-artifacts-enhanced.html    (Main application)
-├── README.md                           (This file)
-└── [Other documentation files]
-```
-
-**Single HTML File** - No build process, no dependencies, no server needed.
+Built with **Next.js 14**, **TypeScript**, and **Tailwind CSS**. Full-stack application with artifact generation and export capabilities.
 
 ## 🧪 Test Coverage
 
@@ -184,31 +174,26 @@ ai-product-copilot/
 - Improved button hover states
 - Better visual hierarchy
 
-## 🌐 Deployment Ready
+## 🌐 Deployment
 
-### For Vercel Deployment
-1. Create a `/public` folder in your Next.js project
-2. Place `product-artifacts-enhanced.html` in `/public/artifacts.html`
-3. Access via: `https://your-domain.com/artifacts.html`
+Deployed on Vercel with automatic deployments on push to master branch.
 
-### Current State
-- ✅ All 7 artifacts generating correctly
-- ✅ Context-aware content based on problem + category
-- ✅ All UI/UX tweaks implemented
-- ✅ Word export functionality
-- ✅ Full documentation updated
-- ✅ Ready for production deployment
+**Live**: [https://product-strategy-copilot-git-master-shivani-1db2.vercel.app](https://product-strategy-copilot-git-master-shivani-1db2.vercel.app)
 
-## 📋 Next Steps
+## 📋 Features
 
-1. **Deploy to Vercel** - Upload to production environment
-2. **Test in Production** - Verify all features work
-3. **Gather User Feedback** - Identify improvements
-4. **Phase 2 Features**:
-   - Project save/management
-   - Sharing & collaboration
-   - PDF export with styling
-   - API integration for backend generation
+### Current
+- ✅ 7 artifact generation (Canvas, PRD, GTM, Features, Validation, Competitive, Pitch)
+- ✅ Category-aware generation (SaaS, B2C, Marketplace, Hardware, AI, FinTech)
+- ✅ Export to PDF, DOCX, Markdown
+- ✅ Dark mode support
+- ✅ History tracking with localStorage
+
+### Future
+- Project save/management
+- Sharing & collaboration
+- API backend integration
+- Advanced customization options
 
 ## 🤝 Support
 
