@@ -57,7 +57,7 @@ export function PersonaSection({
               </li>
               {personas.filter((p) => p.type === 'tertiary').length > 0 && (
                 <li className="text-sm text-blue-800 dark:text-blue-300">
-                  <strong>Edge Cases:</strong> Don't over-engineer for {personas
+                  <strong>Edge Cases:</strong> Don&apos;t over-engineer for {personas
                     .filter((p) => p.type === 'tertiary')
                     .map((p) => p.name)
                     .join(', ')}{' '}

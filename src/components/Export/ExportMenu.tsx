@@ -142,7 +142,7 @@ export const ExportMenu = ({ generation, isOpen, onClose }: ExportMenuProps) => 
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Export Project</h2>
           <p className="text-gray-600 dark:text-gray-400">
-            Choose how you'd like to export your artifacts
+            Choose how you&apos;d like to export your artifacts
           </p>
         </div>
 

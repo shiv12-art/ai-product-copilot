@@ -178,7 +178,7 @@ export function PersonaCard({ persona, isHighlighted = false }: PersonaCardProps
               className="text-sm text-amber-700 dark:text-amber-400 flex items-start gap-2"
             >
               <span className="text-amber-500 mt-1">▸</span>
-              <span>"{objection}"</span>
+              <span>&quot;{objection}&quot;</span>
             </li>
           ))}
         </ul>
