@@ -30,7 +30,7 @@ export const FeedbackDisplay = ({ feedback }: FeedbackDisplayProps) => {
 
       {feedback.comment && (
         <div className="text-sm text-gray-700 dark:text-gray-300 italic">
-          "{feedback.comment}"
+          &quot;{feedback.comment}&quot;
         </div>
       )}
 

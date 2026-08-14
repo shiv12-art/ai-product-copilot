@@ -17,7 +17,7 @@ export function useToast() {
 
     if (duration > 0) {
       setTimeout(() => {
-        remove(id)
+        setMessages((prev) => prev.filter((msg) => msg.id !== id))
       }, duration)
     }
 

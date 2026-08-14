@@ -42,7 +42,7 @@ export const ShareDialog = ({ isOpen, onClose, shareUrl, projectName }: ShareDia
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Share Project</h2>
           <p className="text-gray-600 dark:text-gray-400">
-            Share "{projectName}" with others
+            Share &quot;{projectName}&quot; with others
           </p>
         </div>
 
