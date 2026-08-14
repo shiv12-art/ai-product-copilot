@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Geist, Inter } from 'next/font/google'
+import { Roboto, Inter } from 'next/font/google'
 import './globals.css'
 import '@/styles/typography.css'
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-display' })
+const roboto = Roboto({ weight: ['400', '500', '700'], subsets: ['latin'], variable: '--font-display' })
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' })
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${geist.variable} ${inter.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${roboto.variable} ${inter.variable}`}>
       <head>
         <meta name="theme-color" content="#0284c7" />
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>" />
