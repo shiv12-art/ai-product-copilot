@@ -116,7 +116,7 @@ export default function Home() {
         features: { content: generatedContent.features, editedAt: new Date().toISOString() },
         validation: { content: generatedContent.validation, editedAt: new Date().toISOString() },
         competitive: { content: generatedContent.competitive, editedAt: new Date().toISOString() },
-        metrics: { content: generatedContent.metrics, editedAt: new Date().toISOString() },
+        pitch: { content: generatedContent.pitch, editedAt: new Date().toISOString() },
       }
 
       const generation = {
